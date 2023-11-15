@@ -1,6 +1,12 @@
 const sequelize = require('../config/connection');
 //const { User, Boards, Filters, Location } = require('../models');
-const { User, Boards, Filters, Locations, Users_Boards } = require('../models');
+const {
+  User,
+  Boards,
+  Filters,
+  Locations,
+  Userstoboards,
+} = require('../models');
 
 const userData = require('./userData.json');
 const boardsData = require('./boardsData.json');
@@ -34,16 +40,36 @@ const seedDatabase = async () => {
     });
   }
 
-
-  console.log("seedata\n",users_boardsData);
+  console.log('seedata\n', users_boardsData);
 
   // for (const usersboards of users_boardsData) {
   //   await Users_Boards.create({
   //     ...usersboards,
   //   });
   // }
+  // await Users_Boards.create({
+  //   user_id: 1,
+  //   board_board_id: 1,
+  // });
+  // await Userstoboards.create({
+  //   user_id: 1,
+  //   board_board_id: 1,
+  // });
 
-  console.log
+  const { QueryTypes } = require('sequelize');
+
+  for (const i of users_boardsData) {
+    console.log(i.user_id, '\n', i.board_board_id);
+    await sequelize.query(
+      'INSERT INTO `userstoboards` (`user_id`,`board_board_id`) VALUES (?,?)',
+      {
+        replacements: [i.user_id, i.board_board_id],
+        type: QueryTypes.INSERT,
+      }
+    );
+  }
+
+  console.log;
 
   process.exit(0);
 };
