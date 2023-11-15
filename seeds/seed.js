@@ -1,8 +1,10 @@
 const sequelize = require('../config/connection');
-const { User, Project } = require('../models');
+const { User, Boards, Filters, Location } = require('../models');
 
 const userData = require('./userData.json');
-const projectData = require('./projectData.json');
+const boardsData = require('./boardsData.json');
+const filtersData = require('./filtersData.json');
+const locationData = require('./locationData.json');
 
 const seedDatabase = async () => {
   await sequelize.sync({ force: true });
@@ -12,9 +14,23 @@ const seedDatabase = async () => {
     returning: true,
   });
 
-  for (const project of projectData) {
-    await Project.create({
-      ...project,
+  for (const board of boardsData) {
+    await Boards.create({
+      ...board,
+      user_id: users[Math.floor(Math.random() * users.length)].id,
+    });
+  }
+
+  for (const filter of filtersData) {
+    await Filters.create({
+      ...filter,
+      user_id: users[Math.floor(Math.random() * users.length)].id,
+    });
+  }
+
+  for (const location of locationData) {
+    await Location.create({
+      ...location,
       user_id: users[Math.floor(Math.random() * users.length)].id,
     });
   }
