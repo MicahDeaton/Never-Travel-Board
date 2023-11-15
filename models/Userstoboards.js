@@ -1,18 +1,20 @@
 const { Model, DataTypes } = require('sequelize');
 const bcrypt = require('bcrypt');
 const sequelize = require('../config/connection');
+
 const User = require('./User');
 const Boards = require('./Boards');
 
-class Users_Boards extends Model {}
+class Userstoboards extends Model {}
 
-Users_Boards.init(
+Userstoboards.init(
   {
     user_id: {
       type: DataTypes.INTEGER,
       references: {
         model: User,
         key: 'id',
+        unique: false,
       },
     },
     board_board_id: {
@@ -20,6 +22,7 @@ Users_Boards.init(
       references: {
         model: Boards,
         key: 'board_id',
+        unique: false,
       },
     },
   },
@@ -28,8 +31,8 @@ Users_Boards.init(
     timestamps: false,
     freezeTableName: true,
     underscored: true,
-    modelName: 'users_boards',
+    modelName: 'userstoboards',
   }
 );
 
-module.exports = Users_Boards;
+module.exports = Userstoboards;
