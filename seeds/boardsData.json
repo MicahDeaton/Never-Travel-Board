@@ -1,0 +1,23 @@
+[
+    {
+        "BoardID": 1,
+        "BoardName": "Los Angeles",
+        "FilterItem": 1,
+        "FilterID": 1,
+        "LocationID": 1
+    },
+    {
+        "BoardID": 2,
+        "BoardName": "Las Vegas",
+        "FilterItem": 1,
+        "FilterID": 1,
+        "LocationID": 2
+    },
+    {
+        "BoardID": 3,
+        "BoardName": "New York City",
+        "FilterItem": 2,
+        "FilterID": 2,
+        "LocationID": 3
+    }
+]
