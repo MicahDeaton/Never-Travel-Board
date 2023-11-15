@@ -7,4 +7,5 @@ const Users_Boards = require('./Users_Boards');
 User.belongsToMany(Boards, { through: 'Users_Boards' });
 Boards.belongsToMany(User, { through: 'Users_Boards' });
 
+//module.exports = { User, Boards, Filters, Locations, Users_Boards };
 module.exports = { User, Boards, Filters, Locations, Users_Boards };

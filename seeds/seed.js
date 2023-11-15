@@ -1,5 +1,5 @@
 const sequelize = require('../config/connection');
-// const { User, Boards, Filters, Location } = require('../models');
+//const { User, Boards, Filters, Location } = require('../models');
 const { User, Boards, Filters, Locations, Users_Boards } = require('../models');
 
 const userData = require('./userData.json');
@@ -33,6 +33,9 @@ const seedDatabase = async () => {
       ...location,
     });
   }
+
+
+  console.log("seedata\n",users_boardsData);
 
   // for (const usersboards of users_boardsData) {
   //   await Users_Boards.create({
