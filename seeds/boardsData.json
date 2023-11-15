@@ -1,23 +1,17 @@
 [
     {
-        "BoardID": 1,
-        "BoardName": "Los Angeles",
-        "FilterItem": 1,
-        "FilterID": 1,
-        "LocationID": 1
+        "board_id": 1,
+        "board_name": "Los Angeles",
+        "filter_item": 1
     },
     {
-        "BoardID": 2,
-        "BoardName": "Las Vegas",
-        "FilterItem": 1,
-        "FilterID": 1,
-        "LocationID": 2
+        "board_id": 2,
+        "board_name": "Las Vegas",
+        "filter_item": 1
     },
     {
-        "BoardID": 3,
-        "BoardName": "New York City",
-        "FilterItem": 2,
-        "FilterID": 2,
-        "LocationID": 3
+        "board_id": 3,
+        "board_name": "New York City",
+        "filter_item": 2
     }
 ]
