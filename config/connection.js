@@ -7,7 +7,7 @@ if (process.env.JAWSDB_URL) {
   sequelize = new Sequelize(process.env.JAWSDB_URL);
 } else {
   sequelize = new Sequelize(
-    process.env.DB_NAME,
+    process.env.NeverTravelBoard,
     process.env.DB_USER,
     process.env.DB_PASSWORD,
     {
@@ -17,5 +17,14 @@ if (process.env.JAWSDB_URL) {
     }
   );
 }
+connection.connect( (err) => {
+  if (err){
+      console.log(err)
+  }
+  else
+  {
+      console.log("Database connected!")
+  }
+});
 
 module.exports = sequelize;
