@@ -1,17 +1,27 @@
 [
-    {
-        "board_id": 1,
-        "board_name": "Los Angeles",
-        "filter_item": 1
-    },
-    {
-        "board_id": 2,
-        "board_name": "Las Vegas",
-        "filter_item": 1
-    },
-    {
-        "board_id": 3,
-        "board_name": "New York City",
-        "filter_item": 2
-    }
+  {
+    "board_id": 1,
+    "board_name": "Los Angeles",
+    "board_description": "My trip to LA"
+  },
+  {
+    "board_id": 2,
+    "board_name": "Las Vegas",
+    "board_description": "Vegaaaassss!!!!"
+  },
+  {
+    "board_id": 3,
+    "board_name": "New York City",
+    "board_description": "Chomp the apple!"
+  },
+  {
+    "board_id": 4,
+    "board_name": "Yosemite",
+    "board_description": "It's wide! When will everyone get here?"
+  },
+  {
+    "board_id": 5,
+    "board_name": "Europe",
+    "board_description": "My long trip"
+  }
 ]

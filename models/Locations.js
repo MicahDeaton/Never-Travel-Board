@@ -1,5 +1,4 @@
 const { Model, DataTypes } = require('sequelize');
-const bcrypt = require('bcrypt');
 const sequelize = require('../config/connection');
 
 class Locations extends Model {}
@@ -12,13 +11,34 @@ Locations.init(
       primaryKey: true,
       autoIncrement: true,
     },
+    location_order: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    },
     location_name: {
       type: DataTypes.STRING,
       allowNull: false,
     },
+    location_imageurl: {
+      type: DataTypes.STRING,
+    },
     location_notes: {
       type: DataTypes.STRING,
-      allowNull: true,
+    },
+    location_duration: {
+      type: DataTypes.TIME,
+    },
+    tripadvisor_placeid: {
+      type: DataTypes.STRING,
+    },
+    google_placeid: {
+      type: DataTypes.STRING,
+    },
+    latitude: {
+      type: DataTypes.FLOAT,
+    },
+    longitude: {
+      type: DataTypes.FLOAT,
     },
   },
   {

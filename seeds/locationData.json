@@ -1,14 +1,63 @@
 [
     {
+        "board_id": 1,
+        "location_order": 1,
         "location_name": "Hollywood Palladium",
-        "location_notes": "performance hall"
+        "location_notes": "performance hall",
+        "location_duration": 2,
+        "google_placeid": "ChIJt1-0kze_woARkevCuYSmEOA",
+        "latitude": 34.0985004,
+        "longitude": -118.3268584
     },
     {
+        "board_id": 2,
+        "location_order": 1,
         "location_name": "Bellagio Casino",
-        "location_notes": "acrobat show"
+        "location_notes": "acrobat show",
+        "location_duration": 2,
+        "google_placeid": "ChIJvUdRyzDEyIARhA3R2cXH8oI",
+        "latitude": 36.1129498,
+        "longitude": -115.179087
     },
     {
+        "board_id": 3,
+        "location_order": 1,
         "location_name": "Joe's Pizza",
-        "location_notes": "restaurant"
+        "location_notes": "restaurant",
+        "location_duration": 1,
+        "google_placeid": "ChIJ8Q2WSpJZwokRQz-bYYgEskM",
+        "latitude": 40.7306177,
+        "longitude": -74.0033597
+    },
+    {
+        "board_id": 4,
+        "location_order": 1,
+        "location_name": "Mariposa Grove",
+        "location_notes": "giant trees",
+        "location_imageurl": "https://dynamic-media-cdn.tripadvisor.com/media/photo-o/15/02/ce/4d/walkway.jpg?w=1200&h=-1&s=1",
+        "location_duration": 3,
+        "google_placeid": "ChIJ-8YS5wGQloARFRF6x4FRlHI",
+        "latitude": 37.5102331,
+        "longitude": -119.6042119
+    },
+    {
+        "board_id": 5,
+        "location_order": 1,
+        "location_name": "Paris, France",
+        "location_notes": "Art City",
+        "location_duration": 120,
+        "google_placeid": "ChIJD7fiBh9u5kcRYJSMaMOCCwQ",
+        "latitude": 48.8589383,
+        "longitude": 2.264463
+    },
+    {
+        "board_id": 5,
+        "location_order": 1,
+        "location_name": "Rome, Italy",
+        "location_notes": "Ancient City",
+        "location_duration": 240,
+        "google_placeid": "ChIJw0rXGxGKJRMRAIE4sppPCQM",
+        "latitude": 41.9102083,
+        "longitude": 12.3708467
     }
 ]

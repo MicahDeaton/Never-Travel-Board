@@ -1,5 +1,4 @@
 const { Model, DataTypes } = require('sequelize');
-const bcrypt = require('bcrypt');
 const sequelize = require('../config/connection');
 
 const User = require('./User');
@@ -11,6 +10,8 @@ Userstoboards.init(
   {
     user_id: {
       type: DataTypes.INTEGER,
+      primaryKey: true,
+      allowNull: false,
       references: {
         model: User,
         key: 'id',
@@ -19,6 +20,8 @@ Userstoboards.init(
     },
     board_board_id: {
       type: DataTypes.INTEGER,
+      primaryKey: true,
+      allowNull: false,
       references: {
         model: Boards,
         key: 'board_id',

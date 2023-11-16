@@ -13,5 +13,15 @@
     "name": "Amiko",
     "email": "amiko2k20@aol.com",
     "password": "password12345"
+  },
+  {
+    "name": "user1",
+    "email": "user1@hotmail.com",
+    "password": "user1"
+  },
+  {
+    "name": "user2",
+    "email": "user2@hotmail.com",
+    "password": "user2"
   }
 ]

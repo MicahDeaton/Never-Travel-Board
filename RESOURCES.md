@@ -1,5 +1,10 @@
 # Resource Links
 
+Requirements
+============
+Project requirements
+https://docs.google.com/presentation/d/1yIYYYI9UAmr8LE8owcGIGKo6Rdx6t1MsXoqp4vgwZ3s/edit#slide=id.gcf9fa50de2_0_2287
+
 Wireframe
 =========
 
@@ -24,39 +29,48 @@ Database Diagram Tool
 =====================
 
 Quick Database Diagrams (QuickDBD) is a simple online tool to quickly draw database diagrams by typing.
-https://app.quickdatabasediagrams.com/#/
+
+https://www.quickdatabasediagrams.com/  ->  Go to Try The App
 
 
 QuickDBD database schema
 ========================
+Use QuickDBD to render the EER diagram
+https://app.quickdatabasediagrams.com/#/
 
-User
+Userstoboards
 -
-UserID PK int
-Email string
-Password string
-
-BoardUsers
--
-BoardID FK >- Boards.BoardID 
-UserID FK >- User.UserID
+user_id PK FK >- User.id
+board_board_id PK FK >- Boards.board_id
 
 Boards
 -
-BoardID PK int
-BoardName string
-FilterItem int FK >- Filters.FilterID
-Locations int FK >- Location.LocationID
+board_id PK int
+board_name string
+board_description string
 
 Filters
 -
-FilterID PK int
-FilterName string
+board_id PK FK >- Boards.board_id
+filter_name PK string
 
-Location
+Locations
 -
-LocationID PK int
-LocationName string
-LocationNotes string
-YelpID int
-GooglePlaceID int
+board_id FK >- Boards.board_id
+location_id PK int
+location_order int
+location_name string
+location_imageurl string
+location_notes string
+location_duration time
+tripadvisor_placeid string
+google_placeid string
+latitude float
+longitude float
+
+User
+-
+id PK int
+name string
+email string
+password string
