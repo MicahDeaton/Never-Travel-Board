@@ -1,5 +1,4 @@
 const { Model, DataTypes } = require('sequelize');
-const bcrypt = require('bcrypt');
 const sequelize = require('../config/connection');
 
 class Boards extends Model {}
@@ -16,7 +15,7 @@ Boards.init(
       type: DataTypes.STRING,
       allowNull: false,
     },
-    filter_item: {
+    board_description: {
       type: DataTypes.STRING,
       allowNull: true,
     },

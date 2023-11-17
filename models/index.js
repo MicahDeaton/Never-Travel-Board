@@ -2,20 +2,26 @@ const User = require('./User');
 const Boards = require('./Boards');
 const Filters = require('./Filters');
 const Locations = require('./Locations');
-// const Users_Boards = require('./Users_Boards');
 const Userstoboards = require('./Userstoboards');
 
-// User.belongsToMany(Boards, { through: { model: Users_Boards, unique: false } });
-// Boards.belongsToMany(User, { through: { model: Users_Boards, unique: false } });
-
+// A Board can belong to multiple users.  A User can have many boards.
 User.belongsToMany(Boards, {
-  through: { model: Userstoboards, unique: false },
-  as: 'myuserboards1',
+  through: { model: Userstoboards }
 });
 Boards.belongsToMany(User, {
-  through: { model: Userstoboards, unique: false },
-  as: 'myuserboards2',
+  through: { model: Userstoboards }
 });
 
-//module.exports = { User, Boards, Filters, Locations, Users_Boards };
+// Define a Board as having many Filters
+Boards.hasMany(Filters, {
+  foreignKey: 'board_id',
+  onDelete: 'CASCADE',
+});
+
+// A Board can have many Locations
+Boards.hasMany(Locations, {
+  foreignKey: 'board_id',
+  onDelete: 'CASCADE',
+})
+
 module.exports = { User, Boards, Filters, Locations, Userstoboards };

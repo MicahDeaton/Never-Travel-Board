@@ -1,11 +1,26 @@
 [
     {
+        "board_id": 2,
         "filter_name": "entertainment"
     },
     {
+        "board_id": 3,
+        "filter_name": "entertainment"
+    },
+    {
+        "board_id": 1,
         "filter_name": "food"
     },
     {
+        "board_id": 2,
+        "filter_name": "food"
+    },
+    {
+        "board_id": 3,
+        "filter_name": "food"
+    },
+    {
+        "board_id": 4,
         "filter_name": "nature"
     }
 ]

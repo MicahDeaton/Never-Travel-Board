@@ -1,5 +1,6 @@
 const sequelize = require('../config/connection');
-//const { User, Boards, Filters, Location } = require('../models');
+
+// Import sequelize models
 const {
   User,
   Boards,
@@ -8,6 +9,7 @@ const {
   Userstoboards,
 } = require('../models');
 
+// Seed data
 const userData = require('./userData.json');
 const boardsData = require('./boardsData.json');
 const filtersData = require('./filtersData.json');
@@ -40,34 +42,30 @@ const seedDatabase = async () => {
     });
   }
 
+  // add seed data for the relationship between boards and users
   console.log('seedata\n', users_boardsData);
 
-  // for (const usersboards of users_boardsData) {
-  //   await Users_Boards.create({
-  //     ...usersboards,
-  //   });
-  // }
-  // await Users_Boards.create({
-  //   user_id: 1,
-  //   board_board_id: 1,
-  // });
-  // await Userstoboards.create({
-  //   user_id: 1,
-  //   board_board_id: 1,
-  // });
-
-  const { QueryTypes } = require('sequelize');
-
-  for (const i of users_boardsData) {
-    console.log(i.user_id, '\n', i.board_board_id);
-    await sequelize.query(
-      'INSERT INTO `userstoboards` (`user_id`,`board_board_id`) VALUES (?,?)',
-      {
-        replacements: [i.user_id, i.board_board_id],
-        type: QueryTypes.INSERT,
-      }
-    );
+  // The following sequelize calls for a many-to-many table gives a parameter error when trying to populate JSON data, so we bypass using parameterized queries
+  // -----
+  for (const usersboards of users_boardsData) {
+    await Userstoboards.create({
+      ...usersboards,
+    });
   }
+
+  // add seed data for the relationship between boards and users, not using parameterized queries (may be subject to SQL injection attacks)
+  // const { QueryTypes } = require('sequelize');
+
+  // for (let i of users_boardsData) {
+  //   console.log(i.user_id, '\n', i.board_board_id);
+  //   await sequelize.query(
+  //     'INSERT INTO `userstoboards` (`user_id`,`board_board_id`) VALUES (?,?)',
+  //     {
+  //       replacements: [i.user_id, i.board_board_id],
+  //       type: QueryTypes.INSERT,
+  //     }
+  //   );
+  // }
 
   console.log;
 
