@@ -2,7 +2,7 @@ const router = require('express').Router();
 const { Boards, Filters } = require('../../models');
 
 // get all filters in the database
-router.post('/', async (req, res) => {
+router.post('/', withAuth, async (req, res) => {
     try {
         const filters = await Filters.findAll();
         res.status(200).json(filters);
@@ -12,7 +12,7 @@ router.post('/', async (req, res) => {
     });
 
 // get all filters by board ID
-router.get('/api/boards/:boardId/filters', async (req, res) => {
+router.get('/api/boards/:boardId/filters', withAuth, async (req, res) => {
     try {
       const filters = await Filters.findAll({
         where: {
@@ -28,7 +28,7 @@ router.get('/api/boards/:boardId/filters', async (req, res) => {
   });
   
 //   check if a filter exists on a board
-  router.get('/api/boards/:boardId/filters/:filterName', async (req, res) => {
+  router.get('/api/boards/:boardId/filters/:filterName', withAuth, async (req, res) => {
     try {
       const filter = await Filters.findOne({
         where: {
@@ -48,7 +48,7 @@ router.get('/api/boards/:boardId/filters', async (req, res) => {
   });
 
 //   get a single filter by filter name
-router.post('/:filterName', async (req, res) => {
+router.post('/:filterName', withAuth, async (req, res) => {
     try {
       const filterName = req.params.filterName;
       const filter = await Filters.findOne({
@@ -68,7 +68,7 @@ router.post('/:filterName', async (req, res) => {
   });
 
 // update a filter by the filter name
-router.put('/:filterName', async (req, res) => {
+router.put('/:filterName', withAuth, async (req, res) => {
     try {
       const filterName = req.params.filterName;
       const updatedFilter = req.body;
