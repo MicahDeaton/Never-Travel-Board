@@ -2,7 +2,7 @@ const router = require('express').Router();
 const { User, Boards } = require('../../models');
 
 //   get all board data
-  router.get('/api/boards', async (req, res) => {
+  router.get('/api/boards', withAuth, async (req, res) => {
     try {
       const boardsData = await Boards.findAll();
   
@@ -13,7 +13,7 @@ const { User, Boards } = require('../../models');
   });
 
 // create a new board
-  router.post('/api/boards', async (req, res) => {
+  router.post('/api/boards', withAuth, async (req, res) => {
     try {
       const newBoard = await Boards.create({
         board_name: req.body.board_name,
@@ -27,7 +27,7 @@ const { User, Boards } = require('../../models');
   });
 
 //   update a board by id
-router.put('/:boardId', async (req, res) => {
+router.put('/:boardId', withAuth, async (req, res) => {
     try {
       const boardId = req.params.boardId;
       const updatedBoard = req.body;
