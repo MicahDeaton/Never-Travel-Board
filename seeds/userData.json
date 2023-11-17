@@ -2,26 +2,31 @@
   {
     "name": "Sal",
     "email": "sal@hotmail.com",
-    "password": "password12345"
+    "password": "password12345",
+    "isadmin": false
   },
   {
     "name": "Lernantino",
     "email": "lernantino@gmail.com",
-    "password": "password12345"
+    "password": "password12345",
+    "isadmin": false
   },
   {
     "name": "Amiko",
     "email": "amiko2k20@aol.com",
-    "password": "password12345"
+    "password": "password12345",
+    "isadmin": false
   },
   {
     "name": "user1",
     "email": "user1@hotmail.com",
-    "password": "user1"
+    "password": "user1",
+    "isadmin": true
   },
   {
     "name": "user2",
     "email": "user2@hotmail.com",
-    "password": "user2"
+    "password": "user2",
+    "isadmin": false
   }
 ]
