@@ -1,5 +1,6 @@
 const router = require('express').Router();
 const { User, Boards } = require('../../models');
+const withAuth = require('../../utils/auth');
 
 //   get all board data
   router.get('/api/boards', withAuth, async (req, res) => {

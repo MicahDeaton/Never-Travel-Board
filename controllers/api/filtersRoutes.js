@@ -1,5 +1,6 @@
 const router = require('express').Router();
 const { Boards, Filters } = require('../../models');
+const withAuth = require('../../utils/auth');
 
 // get all filters in the database
 router.post('/', withAuth, async (req, res) => {
