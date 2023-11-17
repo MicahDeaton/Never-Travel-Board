@@ -36,3 +36,9 @@ Tripadvisor
 #### Final Product
 
 ##### Credits
+
+## To-dos
+1. add content for homepage
+    -edit homepage.handlebars file with HTML
+        -link CSS in main.handlebars
+2. 
