@@ -19,10 +19,15 @@ const users_boardsData = require('./users_boards.json');
 const seedDatabase = async () => {
   await sequelize.sync({ force: true });
 
-  const users = await User.bulkCreate(userData, {
-    individualHooks: true,
-    returning: true,
-  });
+  // const users = await User.bulkCreate(userData, {
+  //   individualHooks: true,
+  //   returning: true,
+  // });
+  for (const user of userData) {
+    await User.create({
+      ...user,
+    });
+  }
 
   for (const board of boardsData) {
     await Boards.create({

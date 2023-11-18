@@ -20,19 +20,19 @@ Locations.init(
       allowNull: false,
     },
     location_imageurl: {
-      type: DataTypes.STRING,
+      type: DataTypes.STRING(512),
     },
     location_notes: {
-      type: DataTypes.STRING,
+      type: DataTypes.STRING(4096),
     },
     location_duration: {
       type: DataTypes.TIME,
     },
     tripadvisor_placeid: {
-      type: DataTypes.STRING,
+      type: DataTypes.STRING(64),
     },
     google_placeid: {
-      type: DataTypes.STRING,
+      type: DataTypes.STRING(64),
     },
     latitude: {
       type: DataTypes.FLOAT,

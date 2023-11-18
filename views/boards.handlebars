@@ -1,44 +1,75 @@
-<div class="row">
-  <div class="col-auto">
+<div class='row'>
+  <div class='col-auto'>
     <h2>Welcome, {{name}}!</h2>
   </div>
 </div>
 
-<div class="row mt-4">
-  <div class="col-md-6">
-    <h3>Create a New Board:</h3>
+<div class='row mt-4'>
+  <div class='col-md-6 board-list'>
+    {{#if boards.length}}
+      <h3>Current Board:
+        <span class='text-info'>{{selectedboard.board_name}}</span></h3>
 
-    <form class="form new-board-form">
-      <div class="form-group">
-        <label for="board-name">board name:</label>
-        <input class="form-input" type="text" id="board-name" name="board-name" />
+      <div>
+        {{#each boards as |board|}}
+          <div class='row mb-2'>
+            <div class='col-md-8'>
+              <h4><a
+                  class='selectboard'
+                  data-id='{{board.board_id}}'
+                  href='/boards/select/{{board.board_id}}'
+                >{{board.board_name}}</a></h4>
+            </div>
+            <div class='col-md-4'>
+              <button
+                class='btn btn-sm btn-primary exploreboard'
+                data-id='{{board.board_id}}'
+              >EXPLORE</button>
+            </div>
+          </div>
+        {{/each}}
       </div>
-      <div class="form-group">
-        <label for="board-desc">board description:</label>
-        <textarea class="form-input" id="board-desc" name="board-desc"></textarea>
-      </div>
-      <div class="form-group">
-        <button type="submit" class="btn btn-primary">Create</button>
-      </div>
-    </form>
-  </div>
 
-  <div class="col-md-6 board-list">
-  {{#if boards.length}}
-    <h3>Current Boards:</h3>
-
-    {{#each boards as |board|}}
-    <div class="row mb-2">
-      <div class="col-md-8">
-        <h4><a href="/boards/{{board.board_id}}">{{board.board_name}}</a></h4>
-      </div>
-      <div class="col-md-4">
-        <button class="btn btn-sm btn-danger" data-id="{{board.board_id}}">DELETE</button>
-      </div>
-    </div>
-    {{/each}}
-  {{/if}}
+    {{/if}}
   </div>
 </div>
 
-<script src="./js/profile.js"></script>
+{{#if locations.length}}
+  <div>
+    <div class='text-neutral-content w-full p-5'>
+      <div class='text-left'>
+        <h1 class='mb-5 text-4xl font-bold'>Selected Locations for
+          {{selectedboard.board_name}}</h1>
+      </div>
+    </div>
+    <div
+      id='barcardcontainer'
+      class='w-full grid-cols-5 max-2xl:grid-cols-4 max-lg:grid-cols-3 max-md:grid-cols-2 grid gap-1'
+    >
+      {{#each locations as |location|}}
+        <div class='card bg-gray-800 text-white shadow-xl hover:opacity-90'>
+          <figure class='h-full max-h-[100%]'>
+            <img
+              src='{{location.location_imageurl}}'
+              alt='Board'
+              class='h-full w-full object-center object-cover'
+            />
+          </figure>
+          <div class='card-body h-fit p-5'>
+            <h2 class='card-title'>{{location.location_name}}</h2>
+            <p>{{location.location_notes}}</p>
+            <p>{{location.location_duration}}</p>
+            <p>{{location.latitude}},{{location.longitude}}</p>
+          </div>
+          <div class='card-actions justify-end pr-2 pb-2'>
+            <input type='checkbox' class='toggle' />
+          </div>
+        </div>
+      {{/each}}
+
+    </div>
+  </div>
+{{/if}}
+
+<script src='/js/cdn.tailwindcss.com_3.3.5.js'></script>
+<script src='./js/boards.js'></script>

@@ -4,8 +4,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="Content-Security-Policy" content="font-src 'self' data:; img-src 'self' data:; default-src 'self' http://127.0.0.1:3001/">
+  <!--<meta http-equiv="Content-Security-Policy" content="font-src 'self' data:; img-src 'self' data:; default-src 'self' http://127.0.0.1:3001/">-->
   <title>Never Travel Board</title>
+  <!--<link href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css" rel="stylesheet">-->
+  <link href="/css/daisyui.full.min.css" rel="stylesheet" type="text/css" />
   <link rel="stylesheet" href="/css/jass.css">
   <link rel="stylesheet" href="/css/style.css">
 </head>
@@ -35,6 +37,8 @@
       
     </footer>
   </div>
+
+  <script src="/js/cdn.tailwindcss.com_3.3.5.js"></script>
 
   <!-- Render script for logged in users only -->
   {{#if logged_in}}
