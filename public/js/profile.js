@@ -1,13 +1,15 @@
 const newFormHandler = async (event) => {
   event.preventDefault();
 
-  const name = document.querySelector('#board-name').value.trim();
-  const description = document.querySelector('#board-desc').value.trim();
+  const board_name = document.querySelector('#board-name').value.trim();
+  const board_description = document.querySelector('#board-desc').value.trim();
 
-  if (name && needed_funding && description) {
+  console.log('submit formhandler: ', board_name, board_description);
+
+  if (board_name && board_description) {
     const response = await fetch(`/api/boards`, {
       method: 'POST',
-      body: JSON.stringify({ name, needed_funding, description }),
+      body: JSON.stringify({ board_name, board_description }),
       headers: {
         'Content-Type': 'application/json',
       },
@@ -25,14 +27,28 @@ const delButtonHandler = async (event) => {
   if (event.target.hasAttribute('data-id')) {
     const id = event.target.getAttribute('data-id');
 
-    const response = await fetch(`/api/boards/${id}`, {
-      method: 'DELETE',
-    });
+    let response;
+    if (event.target.classList.contains('deleteboard')) {
+      response = await fetch(`/api/boards/${id}`, {
+        method: 'DELETE',
+      });
 
-    if (response.ok) {
-      document.location.replace('/profile');
-    } else {
-      alert('Failed to delete project');
+      if (response.ok) {
+        document.location.replace('/profile');
+      } else {
+        alert('Failed to delete board');
+      }
+    } else if (event.target.classList.contains('selectboard')) {
+      event.preventDefault();
+      response = await fetch(`/api/boards/select/${id}`, {
+        method: 'POST',
+      });
+
+      if (response.ok) {
+        document.location.replace('/profile');
+      } else {
+        alert('Failed to select board');
+      }
     }
   }
 };

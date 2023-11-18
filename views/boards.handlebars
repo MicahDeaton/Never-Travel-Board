@@ -25,15 +25,15 @@
 
   <div class="col-md-6 board-list">
   {{#if boards.length}}
-    <h3>Current Board: <span class="text-info">{{selectedboard.board_name}}</span></h3>
+    <h3>Current Boards:</h3>
 
     {{#each boards as |board|}}
     <div class="row mb-2">
       <div class="col-md-8">
-        <h4><a class="selectboard" data-id="{{board.board_id}}" href="/boards/select/{{board.board_id}}">{{board.board_name}}</a></h4>
+        <h4><a href="/boards/{{board.board_id}}">{{board.board_name}}</a></h4>
       </div>
       <div class="col-md-4">
-        <button class="btn btn-sm btn-danger deleteboard" data-id="{{board.board_id}}">DELETE</button>
+        <button class="btn btn-sm btn-danger" data-id="{{board.board_id}}">DELETE</button>
       </div>
     </div>
     {{/each}}
