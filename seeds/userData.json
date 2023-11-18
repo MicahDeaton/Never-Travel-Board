@@ -1,20 +1,8 @@
 [
   {
-    "name": "Sal",
-    "email": "sal@hotmail.com",
-    "password": "password12345",
-    "isadmin": false
-  },
-  {
-    "name": "Lernantino",
-    "email": "lernantino@gmail.com",
-    "password": "password12345",
-    "isadmin": false
-  },
-  {
-    "name": "Amiko",
-    "email": "amiko2k20@aol.com",
-    "password": "password12345",
+    "name": "user2",
+    "email": "user2@hotmail.com",
+    "password": "user2",
     "isadmin": false
   },
   {
@@ -24,9 +12,21 @@
     "isadmin": true
   },
   {
-    "name": "user2",
-    "email": "user2@hotmail.com",
-    "password": "user2",
+    "name": "Sal",
+    "email": "sal@hotmail.com",
+    "password": "pass123",
+    "isadmin": false
+  },
+  {
+    "name": "Lernantino",
+    "email": "lernantino@gmail.com",
+    "password": "pass123",
+    "isadmin": false
+  },
+  {
+    "name": "Amiko",
+    "email": "amiko2k20@aol.com",
+    "password": "pass123",
     "isadmin": false
   }
 ]
