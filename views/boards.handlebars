@@ -1,75 +1,75 @@
-<div class='row'>
-  <div class='col-auto'>
-    <h2>Welcome, {{name}}!</h2>
-  </div>
-</div>
+<div class='row p-2'>
+  <div class='flex flex-row p-2'>
 
-<div class='row mt-4'>
-  <div class='col-md-6 board-list'>
-    {{#if boards.length}}
-      <h3>Current Board:
-        <span class='text-info'>{{selectedboard.board_name}}</span></h3>
-
-      <div>
-        {{#each boards as |board|}}
-          <div class='row mb-2'>
-            <div class='col-md-8'>
-              <h4><a
-                  class='selectboard'
-                  data-id='{{board.board_id}}'
-                  href='/boards/select/{{board.board_id}}'
-                >{{board.board_name}}</a></h4>
-            </div>
-            <div class='col-md-4'>
-              <button
-                class='btn btn-sm btn-primary exploreboard'
-                data-id='{{board.board_id}}'
-              >EXPLORE</button>
-            </div>
-          </div>
-        {{/each}}
-      </div>
-
-    {{/if}}
-  </div>
-</div>
-
-{{#if locations.length}}
-  <div>
-    <div class='text-neutral-content w-full p-5'>
-      <div class='text-left'>
-        <h1 class='mb-5 text-4xl font-bold'>Selected Locations for
-          {{selectedboard.board_name}}</h1>
+    <div class='avatar online placeholder'>
+      <div class='bg-neutral text-neutral-content rounded-full w-12'>
+        <span class='text-3xl font-bold'>{{first_char currentuser.name}}</span>
       </div>
     </div>
-    <div
-      id='barcardcontainer'
-      class='w-full grid-cols-5 max-2xl:grid-cols-4 max-lg:grid-cols-3 max-md:grid-cols-2 grid gap-1'
-    >
-      {{#each locations as |location|}}
-        <div class='card bg-gray-800 text-white shadow-xl hover:opacity-90'>
-          <figure class='h-full max-h-[100%]'>
-            <img
-              src='{{location.location_imageurl}}'
-              alt='Board'
-              class='h-full w-full object-center object-cover'
-            />
-          </figure>
-          <div class='card-body h-fit p-5'>
-            <h2 class='card-title'>{{location.location_name}}</h2>
-            <p>{{location.location_notes}}</p>
-            <p>{{location.location_duration}}</p>
-            <p>{{location.latitude}},{{location.longitude}}</p>
-          </div>
-          <div class='card-actions justify-end pr-2 pb-2'>
-            <input type='checkbox' class='toggle' />
-          </div>
-        </div>
+
+    <h2 class='text-4xl font-bold mx-2'>Welcome, {{currentuser.name}}!</h2>
+  </div>
+</div>
+
+<div class='board-list gap-2'>
+  {{#if boards.length}}
+  <div class='bg-gray-200 rounded-box'>
+    <h3 class='text-4xl font-bold p-2'>Current Board:
+      <span class='text-info'>{{selectedboard.board_name}}</span>
+    </h3>
+  </div>
+  {{#if filters.length}}
+  <div class='flex flex-wrap m-2'>
+    <h3 class='text-2xl m-2'>Filters:</h3>
+    <ul class='menu menu-horizontal lg:menu-horizontal bg-gray-300 rounded-box gap-5'>
+      {{#each filters}}
+      {{!-- <li><a>{{filter_name}}</a></li> --}}
+      <button class="btn btn-info rounded-xl btn-outline">{{filter_name}}</button>
       {{/each}}
-
-    </div>
+    </ul>
   </div>
-{{/if}}
+  {{/if}}
 
+  <ul class='min-w-full bg-primary-content menu menu-vertical rounded-box p-2'>
+    {{#each boards as |board|}}
+    <li class='w-full'>
+      <a class='selectboard justify-between' data-id='{{board.board_id}}'
+        href='/boards/select/{{board.board_id}}'>{{board.board_name}}
+        <button class='btn btn-sm btn-primary exploreboard' data-id='{{board.board_id}}'>EXPLORE</button>
+      </a>
+    </li>
+    {{/each}}
+  </ul>
+
+  {{/if}}
+</div>
+
+{{> locationpartial}}
+
+<div>
+  <h3 class='text-4xl font-bold p-2'>Search</h3>
+  <!-- search section for cities -->
+  <section class="form-control w-full">
+    <!-- <label class="label">
+        <span class="label-text w-full max-w-xs text-2xl">Search for:</span>
+    </label> -->
+    <input id="whattosearch" type="text" placeholder="Search keywords" name="filtertypes" list="filtertypes"
+      class="input input-bordered w-full input-primary" />
+    <datalist id="filtertypes">
+      {{#if filters.length}}
+      {{#each filters}}
+      <option value="{{filter_name}}">
+        {{/each}}
+        {{/if}}
+    </datalist>
+  </section>
+  {{!-- <div class="grid grid-cols-2 my-1 gap-1">
+    <button id="find-me" class="btn btn-primary" onclick="geoFindMe()">Search My Location</button>
+    <button id="find-map" class="btn btn-primary" onclick="geoFindMap()">Search Map Location</button>
+  </div>
+  <div id="geometry" class="button">
+  </div> --}}
+</div>
+
+<script src='/js/boards.js'></script>
 <script src='/js/cdn.tailwindcss.com_3.3.5.js'></script>
-<script src='./js/boards.js'></script>

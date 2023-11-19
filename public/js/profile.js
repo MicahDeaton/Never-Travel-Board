@@ -28,6 +28,7 @@ const delButtonHandler = async (event) => {
     const id = event.target.getAttribute('data-id');
 
     let response;
+    // delete the board
     if (event.target.classList.contains('deleteboard')) {
       response = await fetch(`/api/boards/${id}`, {
         method: 'DELETE',
@@ -38,6 +39,7 @@ const delButtonHandler = async (event) => {
       } else {
         alert('Failed to delete board');
       }
+      // select the board and redirect to the board-specific page
     } else if (event.target.classList.contains('selectboard')) {
       event.preventDefault();
       response = await fetch(`/api/boards/select/${id}`, {
@@ -45,7 +47,7 @@ const delButtonHandler = async (event) => {
       });
 
       if (response.ok) {
-        document.location.replace('/profile');
+        document.location.replace(`/boards/${id}`);
       } else {
         alert('Failed to select board');
       }
