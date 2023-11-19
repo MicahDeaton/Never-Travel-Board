@@ -22,5 +22,25 @@
     {
         "board_id": 4,
         "filter_name": "nature"
+    },
+    {
+        "board_id": 5,
+        "filter_name": "art"
+    },
+    {
+        "board_id": 5,
+        "filter_name": "museum"
+    },
+    {
+        "board_id": 5,
+        "filter_name": "opera"
+    },
+    {
+        "board_id": 5,
+        "filter_name": "castles"
+    },
+    {
+        "board_id": 5,
+        "filter_name": "tours"
     }
 ]

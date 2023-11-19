@@ -57,7 +57,7 @@ router.get('/', withAuth, async (req, res) => {
 
 // Board page
 // ----------
-router.get('/boards/:boardId', withAuth, withBoard, async (req, res) => {
+router.get('/boards', withAuth, withBoard, async (req, res) => {
   try {
     const boards = await sequelize.query(
       'SELECT * FROM boards JOIN userstoboards ON boards.board_id = userstoboards.board_board_id WHERE user_id=?',
@@ -65,7 +65,7 @@ router.get('/boards/:boardId', withAuth, withBoard, async (req, res) => {
     );
     console.log(boards);
 
-    req.session.board_id = parseInt(req.param.boardId);
+    req.session.board_id = parseInt(req.params.boardId);
     console.log('\nselected board: ---', req.session.board_id);
     let selectedboard;
     let locations;
@@ -86,9 +86,9 @@ router.get('/boards/:boardId', withAuth, withBoard, async (req, res) => {
     }
 
     res.render('boards', {
-      boards,
+      name: boards,
       selectedboard,
-      //locations,
+      locations,
       logged_in: req.session.logged_in,
     });
   } catch (err) {
@@ -96,41 +96,60 @@ router.get('/boards/:boardId', withAuth, withBoard, async (req, res) => {
   }
 });
 
-
 // Boards explorer page
 // --------------------
 router.get('/boards/:boardId', withAuth, withBoard, async (req, res) => {
   try {
+    console.log('\nBOARDID PARAM: ', req.params.boardId);
+    const boardId = parseInt(req.params.boardId);
+    //TBD: validate board ID received from params and check if user owns the board
+    console.log('\nsetting board from param: ---', boardId);
+    req.session.board_id = boardId; // set the currently selected board
+    req.session.save();
+
+    console.log('\nUSER: ----------', req.session.user_id);
+    let userq = await sequelize.query(
+      'SELECT name,email,isadmin FROM user WHERE id=?',
+      {
+        replacements: [req.session.user_id],
+        type: sequelize.QueryTypes.SELECT,
+      }
+    );
+    console.log('\nUSER: ----------', userq[0]);
+    let currentuser = userq[0];
+
     const boards = await sequelize.query(
       'SELECT * FROM boards JOIN userstoboards ON boards.board_id = userstoboards.board_board_id WHERE user_id=?',
       { replacements: [req.session.user_id], type: sequelize.QueryTypes.SELECT }
     );
-    console.log(boards);
+    console.log('\nBoards: ', boards);
 
-    console.log('\nselected board: ---', req.session.board_id);
     let selectedboard;
     let locations;
-    if (req.session.board_id) {
-      if (req.session.board_id != 0) {
-        selectedboard = boards.find((i) => i.board_id === req.session.board_id);
+    if (boardId !== 0) {
+      selectedboard = boards.find((i) => i.board_id === boardId);
+      console.log('\nselectedboard: ---', selectedboard);
 
-        // If a board is selected, get all the selected locations for that board
-        locations = await sequelize.query(
-          'SELECT * FROM locations WHERE board_id=?',
-          {
-            replacements: [req.session.board_id],
-            type: sequelize.QueryTypes.SELECT,
-          }
-        );
-        console.log('\nLocations of selected board:', locations);
-      }
+      // If a board is selected, get all the selected locations for that board
+      locations = await sequelize.query(
+        'SELECT * FROM locations WHERE board_id=?',
+        { replacements: [boardId], type: sequelize.QueryTypes.SELECT }
+      );
+      console.log('\nLocations of selected board:', locations);
     }
 
+    const filters = await sequelize.query(
+      'SELECT filter_name FROM filters WHERE board_id = ?',
+      { replacements: [boardId], type: sequelize.QueryTypes.SELECT }
+    );
+    console.log('FILTERS: --- ', filters);
+
     res.render('boards', {
-      ...user,
       boards,
       selectedboard,
       locations,
+      filters,
+      currentuser,
       logged_in: req.session.logged_in,
     });
   } catch (err) {
