@@ -68,8 +68,9 @@ router.post('/select/:boardId', withAuth, async (req, res) => {
     const boardData = await Boards.findByPk(req.params.boardId);
 
     // save selected board ID into our session
+    req.session.board_id = parseInt(req.params.boardId);
+    console.log('Saving session board_id', req.session.board_id);
     req.session.save(() => {
-      req.session.board_id = parseInt(req.params.boardId);
       res.status(200).json(boardData);
     });
   } catch (err) {

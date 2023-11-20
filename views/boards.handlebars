@@ -1,44 +1,75 @@
-<div class="row">
-  <div class="col-auto">
-    <h2>Welcome, {{name}}!</h2>
-  </div>
-</div>
+<div class='row p-2'>
+  <div class='flex flex-row p-2'>
 
-<div class="row mt-4">
-  <div class="col-md-6">
-    <h3>Create a New Board:</h3>
-
-    <form class="form new-board-form">
-      <div class="form-group">
-        <label for="board-name">board name:</label>
-        <input class="form-input" type="text" id="board-name" name="board-name" />
-      </div>
-      <div class="form-group">
-        <label for="board-desc">board description:</label>
-        <textarea class="form-input" id="board-desc" name="board-desc"></textarea>
-      </div>
-      <div class="form-group">
-        <button type="submit" class="btn btn-primary">Create</button>
-      </div>
-    </form>
-  </div>
-
-  <div class="col-md-6 board-list">
-  {{#if boards.length}}
-    <h3>Current Boards:</h3>
-
-    {{#each boards as |board|}}
-    <div class="row mb-2">
-      <div class="col-md-8">
-        <h4><a href="/boards/{{board.board_id}}">{{board.board_name}}</a></h4>
-      </div>
-      <div class="col-md-4">
-        <button class="btn btn-sm btn-danger" data-id="{{board.board_id}}">DELETE</button>
+    <div class='avatar online placeholder'>
+      <div class='bg-neutral text-neutral-content rounded-full w-12'>
+        <span class='text-3xl font-bold'>{{first_char currentuser.name}}</span>
       </div>
     </div>
-    {{/each}}
-  {{/if}}
+
+    <h2 class='text-4xl font-bold mx-2'>Welcome, {{currentuser.name}}!</h2>
   </div>
 </div>
 
-<script src="./js/profile.js"></script>
+<div class='board-list gap-2'>
+  {{#if boards.length}}
+  <div class='bg-gray-200 rounded-box'>
+    <h3 class='text-4xl font-bold p-2'>Current Board:
+      <span class='text-info'>{{selectedboard.board_name}}</span>
+    </h3>
+  </div>
+  {{#if filters.length}}
+  <div class='flex flex-wrap m-2'>
+    <h3 class='text-2xl m-2'>Filters:</h3>
+    <ul class='menu menu-horizontal lg:menu-horizontal bg-gray-300 rounded-box gap-5'>
+      {{#each filters}}
+      {{!-- <li><a>{{filter_name}}</a></li> --}}
+      <button class="btn btn-info rounded-xl btn-outline">{{filter_name}}</button>
+      {{/each}}
+    </ul>
+  </div>
+  {{/if}}
+
+  <ul class='min-w-full bg-primary-content menu menu-vertical rounded-box p-2'>
+    {{#each boards as |board|}}
+    <li class='w-full'>
+      <a class='selectboard justify-between' data-id='{{board.board_id}}'
+        href='/boards/select/{{board.board_id}}'>{{board.board_name}}
+        <button class='btn btn-sm btn-primary exploreboard' data-id='{{board.board_id}}'>EXPLORE</button>
+      </a>
+    </li>
+    {{/each}}
+  </ul>
+
+  {{/if}}
+</div>
+
+{{> locationpartial}}
+
+<div>
+  <h3 class='text-4xl font-bold p-2'>Search</h3>
+  <!-- search section for cities -->
+  <section class="form-control w-full">
+    <!-- <label class="label">
+        <span class="label-text w-full max-w-xs text-2xl">Search for:</span>
+    </label> -->
+    <input id="whattosearch" type="text" placeholder="Search keywords" name="filtertypes" list="filtertypes"
+      class="input input-bordered w-full input-primary" />
+    <datalist id="filtertypes">
+      {{#if filters.length}}
+      {{#each filters}}
+      <option value="{{filter_name}}">
+        {{/each}}
+        {{/if}}
+    </datalist>
+  </section>
+  {{!-- <div class="grid grid-cols-2 my-1 gap-1">
+    <button id="find-me" class="btn btn-primary" onclick="geoFindMe()">Search My Location</button>
+    <button id="find-map" class="btn btn-primary" onclick="geoFindMap()">Search Map Location</button>
+  </div>
+  <div id="geometry" class="button">
+  </div> --}}
+</div>
+
+<script src='/js/boards.js'></script>
+<script src='/js/cdn.tailwindcss.com_3.3.5.js'></script>

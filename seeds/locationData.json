@@ -45,6 +45,7 @@
         "location_order": 1,
         "location_name": "Paris, France",
         "location_notes": "Art City",
+        "location_imageurl": "https://lh5.googleusercontent.com/p/AF1QipMzTd_KByeLHCZyaHs8AFlvmhFZxyAY_VJ9WbV8=w408-h254-k-no",
         "location_duration": 120,
         "google_placeid": "ChIJD7fiBh9u5kcRYJSMaMOCCwQ",
         "latitude": 48.8589383,
@@ -52,12 +53,24 @@
     },
     {
         "board_id": 5,
-        "location_order": 1,
+        "location_order": 2,
         "location_name": "Rome, Italy",
         "location_notes": "Ancient City",
+        "location_imageurl": "https://lh5.googleusercontent.com/p/AF1QipPFpXe7Q50EY_M8p2xJ6SpSx80tCvHQ52hXC29i=w408-h306-k-no",
         "location_duration": 240,
         "google_placeid": "ChIJw0rXGxGKJRMRAIE4sppPCQM",
         "latitude": 41.9102083,
         "longitude": 12.3708467
+    },
+        {
+        "board_id": 5,
+        "location_order": 3,
+        "location_name": "Amsterdam, Nederland",
+        "location_notes": "Venice of the North",
+        "location_imageurl": "https://lh5.googleusercontent.com/p/AF1QipNQDK0RlpisbTZZfcUZsywyMT7hTILkCpcsMDSa=w408-h306-k-no",
+        "location_duration": 120,
+        "google_placeid": "ChIJVXealLU_xkcRja_At0z9AGY",
+        "latitude": 52.3547607,
+        "longitude": 4.7391521
     }
 ]

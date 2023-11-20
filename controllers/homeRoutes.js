@@ -1,7 +1,8 @@
 const sequelize = require('../config/connection');
 const router = require('express').Router();
-const { User, Boards, Userstoboards } = require('../models');
+const { User, Boards, Userstoboards, Locations } = require('../models');
 const withAuth = require('../utils/auth');
+const withBoard = require('../utils/withboard');
 
 // router.get('/', async (req, res) => {
 //   try {
@@ -29,18 +30,23 @@ const withAuth = require('../utils/auth');
 //   }
 // });
 
+// Main page: all users, boards, and locations table
+// -------------------------------------------------
 router.get('/', withAuth, async (req, res) => {
-  console.log('GET / ROUTE ===');
   try {
     const userData = await User.findAll({
       attributes: { exclude: ['password'] },
       order: [['name', 'ASC']],
     });
 
-    const users = userData.map((project) => project.get({ plain: true }));
+    const locationlist = await sequelize.query(
+      'SELECT locations.location_name,locations.location_imageurl,locations.location_notes,boards.board_name,boards.board_description,user.name FROM locations INNER JOIN boards ON boards.board_id = locations.board_id INNER JOIN userstoboards ON userstoboards.board_board_id = boards.board_id INNER JOIN user ON user.id = userstoboards.user_id',
+      { type: sequelize.QueryTypes.SELECT }
+    );
+    console.log(locationlist);
 
     res.render('homepage', {
-      users,
+      locationlist,
       // Pass the logged in flag to the template
       logged_in: req.session.logged_in,
     });
@@ -49,28 +55,110 @@ router.get('/', withAuth, async (req, res) => {
   }
 });
 
-// router.get('/project/:id', async (req, res) => {
-//   try {
-//     const projectData = await Project.findByPk(req.params.id, {
-//       include: [
-//         {
-//           model: User,
-//           attributes: ['name'],
-//         },
-//       ],
-//     });
+// Board page
+// ----------
+router.get('/boards', withAuth, withBoard, async (req, res) => {
+  try {
+    const boards = await sequelize.query(
+      'SELECT * FROM boards JOIN userstoboards ON boards.board_id = userstoboards.board_board_id WHERE user_id=?',
+      { replacements: [req.session.user_id], type: sequelize.QueryTypes.SELECT }
+    );
+    console.log(boards);
 
-//     const project = projectData.get({ plain: true });
+    req.session.board_id = parseInt(req.params.boardId);
+    console.log('\nselected board: ---', req.session.board_id);
+    let selectedboard;
+    let locations;
+    if (req.session.board_id) {
+      if (req.session.board_id != 0) {
+        selectedboard = boards.find((i) => i.board_id === req.session.board_id);
 
-//     res.render('project', {
-//       ...project,
-//       logged_in: req.session.logged_in
-//     });
-//   } catch (err) {
-//     res.status(500).json(err);
-//   }
-// });
+        // If a board is selected, get all the selected locations for that board
+        locations = await sequelize.query(
+          'SELECT * FROM locations WHERE board_id=?',
+          {
+            replacements: [req.session.board_id],
+            type: sequelize.QueryTypes.SELECT,
+          }
+        );
+        console.log('\nLocations of selected board:', locations);
+      }
+    }
 
+    res.render('boards', {
+      name: boards,
+      selectedboard,
+      locations,
+      logged_in: req.session.logged_in,
+    });
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
+
+// Boards explorer page
+// --------------------
+router.get('/boards/:boardId', withAuth, withBoard, async (req, res) => {
+  try {
+    console.log('\nBOARDID PARAM: ', req.params.boardId);
+    const boardId = parseInt(req.params.boardId);
+    //TBD: validate board ID received from params and check if user owns the board
+    console.log('\nsetting board from param: ---', boardId);
+    req.session.board_id = boardId; // set the currently selected board
+    req.session.save();
+
+    console.log('\nUSER: ----------', req.session.user_id);
+    let userq = await sequelize.query(
+      'SELECT name,email,isadmin FROM user WHERE id=?',
+      {
+        replacements: [req.session.user_id],
+        type: sequelize.QueryTypes.SELECT,
+      }
+    );
+    console.log('\nUSER: ----------', userq[0]);
+    let currentuser = userq[0];
+
+    const boards = await sequelize.query(
+      'SELECT * FROM boards JOIN userstoboards ON boards.board_id = userstoboards.board_board_id WHERE user_id=?',
+      { replacements: [req.session.user_id], type: sequelize.QueryTypes.SELECT }
+    );
+    console.log('\nBoards: ', boards);
+
+    let selectedboard;
+    let locations;
+    if (boardId !== 0) {
+      selectedboard = boards.find((i) => i.board_id === boardId);
+      console.log('\nselectedboard: ---', selectedboard);
+
+      // If a board is selected, get all the selected locations for that board
+      locations = await sequelize.query(
+        'SELECT * FROM locations WHERE board_id=?',
+        { replacements: [boardId], type: sequelize.QueryTypes.SELECT }
+      );
+      console.log('\nLocations of selected board:', locations);
+    }
+
+    const filters = await sequelize.query(
+      'SELECT filter_name FROM filters WHERE board_id = ?',
+      { replacements: [boardId], type: sequelize.QueryTypes.SELECT }
+    );
+    console.log('FILTERS: --- ', filters);
+
+    res.render('boards', {
+      boards,
+      selectedboard,
+      locations,
+      filters,
+      currentuser,
+      logged_in: req.session.logged_in,
+    });
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
+
+// User profile page
+// -----------------
 // Use withAuth middleware to prevent access to route
 router.get('/profile', withAuth, async (req, res) => {
   try {
@@ -84,18 +172,9 @@ router.get('/profile', withAuth, async (req, res) => {
     console.log(user);
 
     // Find all boards for this user
-
-    //   await sequelize.query(
-    //     'INSERT INTO `userstoboards` (`user_id`,`board_board_id`) VALUES (?,?)',
-    //     {
-    //       replacements: [i.user_id, i.board_board_id],
-    //       type: QueryTypes.INSERT,
-    //     }
-
     const boards = await sequelize.query(
       'SELECT * FROM boards JOIN userstoboards ON boards.board_id = userstoboards.board_board_id WHERE user_id=?',
       { replacements: [req.session.user_id], type: sequelize.QueryTypes.SELECT }
-      //      { replacements: [req.sessionStore.user_id], type: QueryTypes.INSERT }
     );
     // const boardsData = await Boards.findAll({
     //   include: [{ model: User }],
@@ -110,15 +189,28 @@ router.get('/profile', withAuth, async (req, res) => {
 
     console.log('\nselected board: ---', req.session.board_id);
     let selectedboard;
+    let locations;
     if (req.session.board_id) {
-      selectedboard = boards.find((i) => i.board_id === req.session.board_id);
+      if (req.session.board_id != 0) {
+        selectedboard = boards.find((i) => i.board_id === req.session.board_id);
+
+        // If a board is selected, get all the selected locations for that board
+        locations = await sequelize.query(
+          'SELECT * FROM locations WHERE board_id=?',
+          {
+            replacements: [req.session.board_id],
+            type: sequelize.QueryTypes.SELECT,
+          }
+        );
+        console.log('\nLocations of selected board:', locations);
+      }
     }
-    console.log('\nafter find selected board: ---', selectedboard);
 
     res.render('profile', {
       ...user,
       boards,
       selectedboard,
+      locations,
       logged_in: req.session.logged_in,
     });
   } catch (err) {
@@ -126,6 +218,8 @@ router.get('/profile', withAuth, async (req, res) => {
   }
 });
 
+// Login page
+// ----------
 router.get('/login', (req, res) => {
   // If the user is already logged in, redirect the request to another route
   if (req.session.logged_in) {
