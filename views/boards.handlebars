@@ -15,20 +15,9 @@
   {{#if boards.length}}
   <div class='bg-gray-200 rounded-box'>
     <h3 class='text-4xl font-bold p-2'>Current Board:
-      <span class='text-info'>{{selectedboard.board_name}}</span>
+      <span id="page_board_id" class='text-info' data-board_id="{{selectedboard.board_name}}">{{selectedboard.board_name}}</span>
     </h3>
   </div>
-  {{#if filters.length}}
-  <div class='flex flex-wrap m-2'>
-    <h3 class='text-2xl m-2'>Filters:</h3>
-    <ul class='menu menu-horizontal lg:menu-horizontal bg-gray-300 rounded-box gap-5'>
-      {{#each filters}}
-      {{!-- <li><a>{{filter_name}}</a></li> --}}
-      <button class="btn btn-info rounded-xl btn-outline">{{filter_name}}</button>
-      {{/each}}
-    </ul>
-  </div>
-  {{/if}}
 
   <ul class='min-w-full bg-primary-content menu menu-vertical rounded-box p-2'>
     {{#each boards as |board|}}
@@ -48,28 +37,63 @@
 
 <div>
   <h3 class='text-4xl font-bold p-2'>Search</h3>
-  <!-- search section for cities -->
-  <section class="form-control w-full">
-    <!-- <label class="label">
-        <span class="label-text w-full max-w-xs text-2xl">Search for:</span>
-    </label> -->
-    <input id="whattosearch" type="text" placeholder="Search keywords" name="filtertypes" list="filtertypes"
-      class="input input-bordered w-full input-primary" />
-    <datalist id="filtertypes">
-      {{#if filters.length}}
+
+  {{#if filters.length}}
+  <div class='flex flex-wrap m-2'>
+    <h3 class='text-2xl m-2'>Filters:</h3>
+    <ul class='menu menu-horizontal lg:menu-horizontal bg-gray-300 rounded-box gap-5'>
       {{#each filters}}
-      <option value="{{filter_name}}">
-        {{/each}}
-        {{/if}}
-    </datalist>
-  </section>
-  {{!-- <div class="grid grid-cols-2 my-1 gap-1">
-    <button id="find-me" class="btn btn-primary" onclick="geoFindMe()">Search My Location</button>
-    <button id="find-map" class="btn btn-primary" onclick="geoFindMap()">Search Map Location</button>
+      {{!-- <li><a>{{filter_name}}</a></li> --}}
+      <button class="btn btn-info rounded-xl btn-outline">{{filter_name}}</button>
+      {{/each}}
+    </ul>
   </div>
-  <div id="geometry" class="button">
-  </div> --}}
+  {{/if}}
+
+  <div class='flex flex-wrap'>
+    <!-- search section for cities -->
+    <section class="form-control w-full lg:w-1/2 lg:pr-2">
+      <label class="label">
+        <span class="label-text w-full max-w-xs text-2xl">Destination:</span>
+      </label>
+
+      <input id="wheretosearch" type="text" placeholder="Search keywords" name="desttypes" list="desttypes"
+        class="input input-bordered w-full input-primary" />
+    </section>
+
+    <section class="form-control w-full lg:w-1/2">
+      <label class="label">
+        <span class="label-text w-full max-w-xs text-2xl">Filters:</span>
+      </label>
+
+      <input id="whattosearch" type="text" placeholder="Search keywords" name="filtertypes" list="filtertypes"
+        class="input input-bordered w-full input-primary" />
+      <datalist id="filtertypes">
+        {{#if filters.length}}
+        {{#each filters}}
+        <option value="{{filter_name}}">
+          {{/each}}
+          {{/if}}
+      </datalist>
+    </section>
+
+  </div>
+
+  <div class="grid grid-cols-2 my-1 gap-1">
+    {{!-- <button id="find-me" class="btn btn-primary" onclick="geoFindMe()">Search My Location</button> --}}
+    <button id="find-map" class="btn btn-primary" onclick="searchHandler(event)">Inspire me!</button>
+  </div>
+  <div id="geometry" class="btn p-2 m-2">
+  </div>
+
+  <div id="map" class="w-full h-64 rounded-2xl w-full h-96 shadow-2xl "></div>
+
 </div>
 
-<script src='/js/boards.js'></script>
-<script src='/js/cdn.tailwindcss.com_3.3.5.js'></script>
+<script
+  src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDAKGh9hM6lkhtz5MNmuUehgwnvtLVjYr8&libraries=places,maps&v=beta&callback=initMap"
+  async>
+  </script>
+{{!--
+<script src="/js/googleapis.com_beta.js"></script> --}}
+<script src='/js/boards.js' defer></script>
