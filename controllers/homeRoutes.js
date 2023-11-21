@@ -4,52 +4,28 @@ const { User, Boards, Userstoboards, Locations } = require('../models');
 const withAuth = require('../utils/auth');
 const withBoard = require('../utils/withboard');
 
-// router.get('/', async (req, res) => {
-//   try {
-//     // Get all projects and JOIN with user data
-//     const boardsData = await Boards.findAll({
-//       include: [
-//         {
-//           model: Users,
-//           attributes: ['name'],
-//         },
-//       ],
-//     });
-
-//     // Serialize data so the template can read it
-//     const allboards = boardsData.map((allboards) => allboards.get({ plain: true }));
-
-//     console.log("All Boards:\n", allboards);
-//     // Pass serialized data and session flag into template
-//     res.render('homepage', {
-//       allboards,
-//       logged_in: req.session.logged_in
-//     });
-//   } catch (err) {
-//     res.status(500).json(err);
-//   }
-// });
-
-// Main page: all users, boards, and locations table
-// -------------------------------------------------
-router.get('/', withAuth, async (req, res) => {
+router.get('/', async (req, res) => {
+  console.log('homeroute')
   try {
-    const userData = await User.findAll({
-      attributes: { exclude: ['password'] },
-      order: [['name', 'ASC']],
-    });
+    res.render("homepage");
+    // // Get all projects and JOIN with user data
+    // const projectData = await Project.findAll({
+    //   include: [
+    //     {
+    //       model: User,
+    //       attributes: ['name'],
+    //     },
+    //   ],
+    // });
 
-    const locationlist = await sequelize.query(
-      'SELECT locations.location_name,locations.location_imageurl,locations.location_notes,boards.board_name,boards.board_description,user.name FROM locations INNER JOIN boards ON boards.board_id = locations.board_id INNER JOIN userstoboards ON userstoboards.board_board_id = boards.board_id INNER JOIN user ON user.id = userstoboards.user_id',
-      { type: sequelize.QueryTypes.SELECT }
-    );
-    console.log(locationlist);
+    // // Serialize data so the template can read it
+    // const projects = projectData.map((project) => project.get({ plain: true }));
 
-    res.render('homepage', {
-      locationlist,
-      // Pass the logged in flag to the template
-      logged_in: req.session.logged_in,
-    });
+    // // Pass serialized data and session flag into template
+    // res.render('homepage', { 
+    //   projects, 
+    //   logged_in: req.session.logged_in 
+    // });
   } catch (err) {
     res.status(500).json(err);
   }
