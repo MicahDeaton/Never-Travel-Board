@@ -7,36 +7,32 @@
       </div>
     </div>
 
-    <h2 class='text-4xl font-bold mx-2'>Welcome, {{currentuser.name}}!</h2>
+    <h2 class='text-4xl font-bold mx-2 text-primary'>Welcome, {{currentuser.name}}!</h2>
   </div>
 </div>
-
-<div class='board-list gap-2'>
-  {{#if boards.length}}
-  <div class='bg-gray-200 rounded-box'>
-    <h3 class='text-4xl font-bold p-2'>Current Board:
-      <span id="page_board_id" class='text-info' data-board_id="{{selectedboard.board_id}}">{{selectedboard.board_name}}</span>
-    </h3>
-  </div>
-
-  <ul class='min-w-full bg-primary-content menu menu-vertical rounded-box p-2'>
-    {{#each boards as |board|}}
-    <li class='w-full'>
-      <a class='selectboard justify-between' data-id='{{board.board_id}}'
-        href='/boards/select/{{board.board_id}}'>{{board.board_name}}
-        <button class='btn btn-sm btn-primary exploreboard' data-id='{{board.board_id}}'>EXPLORE</button>
-      </a>
-    </li>
-    {{/each}}
-  </ul>
-
-  {{/if}}
+{{#if sharedusers.length}}
+<div class="bg-base-200 ml-[5%] rounded-box gap-1">
+  <h3 class="text-primary font-bold">Shared users:</h3>
+  {{#each sharedusers as |shareduser|}}
+  <li class="flex flex-row gap-1">
+    <a class="btn">
+      <div class='avatar online placeholder mr-2'>
+        <div class='bg-neutral text-neutral-content rounded-full w-8'>
+          <span class='text-xl font-bold'>{{first_char shareduser.name}}</span>
+        </div>
+      </div>{{shareduser.name}}
+    </a>
+  </li>
+  {{/each}}
 </div>
+{{/if}}
+
+{{> boardlistpartial}}
 
 {{> locationpartial}}
 
 <div>
-  <h3 class='text-4xl font-bold p-2'>Search</h3>
+  <h3 class='text-4xl font-bold p-2'>{{#if selectedboard}}Search{{/if}}</h3>
 
   {{#if filters.length}}
   <div class='flex flex-wrap m-2'>
@@ -50,7 +46,8 @@
   </div>
   {{/if}}
 
-  <div class='flex flex-wrap'>
+  {{#if selectedboard}}
+  <div class='flex flex-wrap text-primary'>
     <!-- search section for cities -->
     <section class="form-control w-full lg:w-1/2 lg:pr-2">
       <label class="label">
@@ -79,14 +76,18 @@
 
   </div>
 
-  <div class="grid grid-cols-2 my-1 gap-1">
+  <div class="my-1 gap-1">
     {{!-- <button id="find-me" class="btn btn-primary" onclick="geoFindMe()">Search My Location</button> --}}
-    <button id="find-map" class="btn btn-primary" onclick="searchHandler(event)">Inspire me!</button>
+    <button id="find-map" class="btn btn-primary w-full" alt="Search for filters near the specified location"
+      onclick="searchHandler(event)">Inspire Me</button>
   </div>
   <div id="geometry" class="btn p-2 m-2">
+    <div id="boardlat" data-lat="{{selectedboard.lat}}">Latitude: {{selectedboard.lat}}</div>
+    <div id="boardlng" data-lng="{{selectedboard.lng}}">Longitude: {{selectedboard.lng}}</div>
   </div>
 
   <div id="map" class="w-full h-64 rounded-2xl w-full h-96 shadow-2xl "></div>
+  {{/if}}
 
 </div>
 

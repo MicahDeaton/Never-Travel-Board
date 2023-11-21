@@ -2,6 +2,7 @@ const router = require('express').Router();
 
 const apiRoutes = require('./api');
 const homeRoutes = require('./homeRoutes');
+const boardRoutes = require('./boardRoutes');
 
 // https://expressjs.com/en/api.html#req
 // simple logger for this router's requests
@@ -14,6 +15,7 @@ router.use(function (req, res, next) {
   next();
 });
 
+router.use('/', boardRoutes);
 router.use('/', homeRoutes);
 router.use('/api', apiRoutes);
 

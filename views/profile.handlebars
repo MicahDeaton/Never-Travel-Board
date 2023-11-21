@@ -11,20 +11,11 @@
     <form class='form new-board-form'>
       <div class='form-group'>
         <label for='board-name'>board name:</label>
-        <input
-          class='form-input'
-          type='text'
-          id='board-name'
-          name='board-name'
-        />
+        <input class='form-input' type='text' id='board-name' name='board-name' />
       </div>
       <div class='form-group'>
         <label for='board-desc'>board description:</label>
-        <textarea
-          class='form-input'
-          id='board-desc'
-          name='board-desc'
-        ></textarea>
+        <textarea class='form-input' id='board-desc' name='board-desc'></textarea>
       </div>
       <div class='form-group'>
         <button type='submit' class='btn btn-primary'>Create</button>
@@ -32,29 +23,8 @@
     </form>
   </div>
 
-  <div class='col-md-6 board-list'>
-    {{#if boards.length}}
-      <h3>Current Board:
-        <span class='text-info'>{{selectedboard.board_name}}</span></h3>
-
-      {{#each boards as |board|}}
-        <div class='row mb-2'>
-          <div class='col-md-8'>
-            <h4><a
-                class='selectboard'
-                data-id='{{board.board_id}}'
-                href='/boards/select/{{board.board_id}}'
-              >{{board.board_name}}</a></h4>
-          </div>
-          <div class='col-md-4'>
-            <button
-              class='btn btn-sm btn-danger deleteboard'
-              data-id='{{board.board_id}}'
-            >DELETE</button>
-          </div>
-        </div>
-      {{/each}}
-    {{/if}}
+  <div class="w-1/2">
+    {{> boardlistpartial}}
   </div>
 </div>
 

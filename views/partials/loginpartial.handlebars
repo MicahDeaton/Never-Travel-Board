@@ -1,0 +1,25 @@
+{{!-- This renders the login page with a board of 8 random travel pics --}}
+
+<div id='loginboardcontainer' {{!--
+    class='w-full grid-cols-5 max-2xl:grid-cols-4 max-lg:grid-cols-3 max-md:grid-cols-2 grid gap-1'> --}}
+    class='grid grid-cols-8 gap-1'>
+    {{#each locations as |location|}}
+    {{!-- <div class='card bg-gray-800 text-white shadow-xl hover:opacity-90 image-full'> --}}
+        <div class='icard text-white h-fit w-fit'>
+            <a href='{{location.location_link}}' class='icard_image' alt='{{location.location_name}}' target="_blank">
+                <img src='{{location.location_imageurl}}' alt='{{location.location_name}}'
+                    class='h-full w-full object-center object-cover' referrerpolicy='no-referrer' />
+            </a>
+            {{!-- <div class='icard_title h-fit p-2'>
+                <h2 class=''>{{location.location_name}}</h2>
+                <p>{{location.location_notes}}</p>
+                <p>{{location.location_duration}}</p>
+                <p class="text-sm">{{location.latitude}},{{location.longitude}}</p>
+            </div> --}}
+            {{!-- <div class='card-actions justify-end pr-2 pb-2'>
+                <input type='checkbox' class='toggle' />
+            </div> --}}
+        </div>
+        {{/each}}
+
+    </div>
