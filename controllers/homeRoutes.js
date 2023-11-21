@@ -4,32 +4,6 @@ const { User, Boards, Userstoboards, Locations } = require('../models');
 const withAuth = require('../utils/auth');
 const withBoard = require('../utils/withboard');
 
-// router.get('/', async (req, res) => {
-//   try {
-//     // Get all projects and JOIN with user data
-//     const boardsData = await Boards.findAll({
-//       include: [
-//         {
-//           model: Users,
-//           attributes: ['name'],
-//         },
-//       ],
-//     });
-
-//     // Serialize data so the template can read it
-//     const allboards = boardsData.map((allboards) => allboards.get({ plain: true }));
-
-//     console.log("All Boards:\n", allboards);
-//     // Pass serialized data and session flag into template
-//     res.render('homepage', {
-//       allboards,
-//       logged_in: req.session.logged_in
-//     });
-//   } catch (err) {
-//     res.status(500).json(err);
-//   }
-// });
-
 // Main page: all users, boards, and locations table
 // -------------------------------------------------
 router.get('/', withAuth, async (req, res) => {
@@ -48,108 +22,6 @@ router.get('/', withAuth, async (req, res) => {
     res.render('homepage', {
       locationlist,
       // Pass the logged in flag to the template
-      logged_in: req.session.logged_in,
-    });
-  } catch (err) {
-    res.status(500).json(err);
-  }
-});
-
-// Board page
-// ----------
-router.get('/boards', withAuth, withBoard, async (req, res) => {
-  try {
-    const boards = await sequelize.query(
-      'SELECT * FROM boards JOIN userstoboards ON boards.board_id = userstoboards.board_board_id WHERE user_id=?',
-      { replacements: [req.session.user_id], type: sequelize.QueryTypes.SELECT }
-    );
-    console.log(boards);
-
-    req.session.board_id = parseInt(req.params.boardId);
-    console.log('\nselected board: ---', req.session.board_id);
-    let selectedboard;
-    let locations;
-    if (req.session.board_id) {
-      if (req.session.board_id != 0) {
-        selectedboard = boards.find((i) => i.board_id === req.session.board_id);
-
-        // If a board is selected, get all the selected locations for that board
-        locations = await sequelize.query(
-          'SELECT * FROM locations WHERE board_id=?',
-          {
-            replacements: [req.session.board_id],
-            type: sequelize.QueryTypes.SELECT,
-          }
-        );
-        console.log('\nLocations of selected board:', locations);
-      }
-    }
-
-    res.render('boards', {
-      name: boards,
-      selectedboard,
-      locations,
-      logged_in: req.session.logged_in,
-    });
-  } catch (err) {
-    res.status(500).json(err);
-  }
-});
-
-// Boards explorer page
-// --------------------
-router.get('/boards/:boardId', withAuth, withBoard, async (req, res) => {
-  try {
-    console.log('\nBOARDID PARAM: ', req.params.boardId);
-    const boardId = parseInt(req.params.boardId);
-    //TBD: validate board ID received from params and check if user owns the board
-    console.log('\nsetting board from param: ---', boardId);
-    req.session.board_id = boardId; // set the currently selected board
-    req.session.save();
-
-    console.log('\nUSER: ----------', req.session.user_id);
-    let userq = await sequelize.query(
-      'SELECT name,email,isadmin FROM user WHERE id=?',
-      {
-        replacements: [req.session.user_id],
-        type: sequelize.QueryTypes.SELECT,
-      }
-    );
-    console.log('\nUSER: ----------', userq[0]);
-    let currentuser = userq[0];
-
-    const boards = await sequelize.query(
-      'SELECT * FROM boards JOIN userstoboards ON boards.board_id = userstoboards.board_board_id WHERE user_id=?',
-      { replacements: [req.session.user_id], type: sequelize.QueryTypes.SELECT }
-    );
-    console.log('\nBoards: ', boards);
-
-    let selectedboard;
-    let locations;
-    if (boardId !== 0) {
-      selectedboard = boards.find((i) => i.board_id === boardId);
-      console.log('\nselectedboard: ---', selectedboard);
-
-      // If a board is selected, get all the selected locations for that board
-      locations = await sequelize.query(
-        'SELECT * FROM locations WHERE board_id=?',
-        { replacements: [boardId], type: sequelize.QueryTypes.SELECT }
-      );
-      console.log('\nLocations of selected board:', locations);
-    }
-
-    const filters = await sequelize.query(
-      'SELECT filter_name FROM filters WHERE board_id = ?',
-      { replacements: [boardId], type: sequelize.QueryTypes.SELECT }
-    );
-    console.log('FILTERS: --- ', filters);
-
-    res.render('boards', {
-      boards,
-      selectedboard,
-      locations,
-      filters,
-      currentuser,
       logged_in: req.session.logged_in,
     });
   } catch (err) {
@@ -206,9 +78,12 @@ router.get('/profile', withAuth, async (req, res) => {
       }
     }
 
+    let hasdelete = true;
+
     res.render('profile', {
       ...user,
       boards,
+      hasdelete,
       selectedboard,
       locations,
       logged_in: req.session.logged_in,
@@ -220,14 +95,82 @@ router.get('/profile', withAuth, async (req, res) => {
 
 // Login page
 // ----------
-router.get('/login', (req, res) => {
+router.get('/login', async (req, res) => {
   // If the user is already logged in, redirect the request to another route
   if (req.session.logged_in) {
     res.redirect('/profile');
     return;
   }
 
-  res.render('login');
+  // get some random pictures from unsplash
+  const term = 'travel';
+  let apiUrl = `https://api.unsplash.com/photos/random?query=${term}&orientation=portrait&count=8&per_page=1&client_id=${process.env.UNSPLASH_API}`;
+  console.log(apiUrl);
+
+  let randompics;
+  let locations;
+
+  try {
+    let unsplash_fetch = await fetch(apiUrl, {
+      method: 'GET',
+      headers: {
+        // Origin: 'null', // cors-anywhere proxy needs this
+        // 'Accept-Language': 'en, *',
+        Accept: 'application/json',
+      },
+    });
+    randompics = await unsplash_fetch.json();
+    console.log('result: ', randompics);
+
+    // convert the Unsplash API to a locations array object
+    locations = randompics.map((i) => {
+      let loc = {
+        location_name: '',
+        location_imageurl: '',
+        location_link: '',
+        latitude: null,
+        longitude: null,
+      };
+      if (i.location && i.location.name) {
+        loc.location_name = i.location.name;
+      } else if (i.description && (i.description.length < 32)) {
+        loc.location_name = i.description;
+      } else if (i.alt_description && (i.alt_description.length < 32)) {
+        loc.location_name = i.alt_description;
+      } else {
+        loc.location_name = i.slug;
+      }
+      loc.location_name = loc.location_name.substring(0, 32);
+
+      if (i.links && i.links.html) {
+        loc.location_link = i.links.html;
+      }
+      if (i.location.position.latitude) {
+        loc.latitude = i.location.position.latitude;
+      }
+      if (i.location.position.longitude) {
+        loc.longitude = i.location.position.longitude;
+      }
+      loc.location_imageurl = i.urls.thumb; // .thumb, .small, .full, .raw 
+
+      return loc;
+    });
+
+    res.status(200);
+  } catch (err) {
+    console.log('error in fetch() to unsplash on /login', err);
+    res
+      .status(404)
+      .json({ error: 'error in fetch() to unsplash on /login', message: err });
+    return;
+  }
+
+  console.log('random pics: ', locations
+  
+  
+  );
+
+  res.render('login', { locations });
 });
 
 module.exports = router;

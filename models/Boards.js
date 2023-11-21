@@ -19,6 +19,22 @@ Boards.init(
       type: DataTypes.STRING,
       allowNull: true,
     },
+    lat: {
+      type: DataTypes.FLOAT,
+      allowNull: true,
+    },
+    lng: {
+      type: DataTypes.FLOAT,
+      allowNull: true,
+    },
+    radius: {
+      type: DataTypes.INTEGER,
+      allowNull: true,
+    },
+    search: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
   },
   {
     sequelize,

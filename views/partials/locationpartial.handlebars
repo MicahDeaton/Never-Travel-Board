@@ -1,11 +1,11 @@
-{{!-- This renders locations of a board
+{{!-- This renders location cards from a board
 locations: array of locations
 selectedboard: SELECT * FROM locations WHERE board_id=?
 --}}
 
 {{#if locations.length}}
 <div>
-    <div class='w-full p-2'>
+    <div class='w-full p-2 text-primary'>
         <div class='text-left'>
             <h1 class='mb-5 text-4xl font-bold'>Selected Locations for
                 {{selectedboard.board_name}}</h1>

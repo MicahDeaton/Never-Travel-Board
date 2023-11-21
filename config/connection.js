@@ -27,6 +27,6 @@ if (process.env.JAWSDB_URL) {
 //   }
 // });
 
-console.log("Our Google API is ", process.env.GOOGLE_API);
+//console.log("Our Google API is ", process.env.GOOGLE_API);
 
 module.exports = sequelize;

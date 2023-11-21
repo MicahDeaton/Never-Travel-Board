@@ -1,3 +1,7 @@
+:root {
+  --icard-corner: 35px;
+}
+
 header, .boards:not(:last-child) {
   border-bottom: 1px solid #ccc;
 }
@@ -21,4 +25,45 @@ header, .boards:not(:last-child) {
   color: #056605;
   font-weight: bold;
   margin-left: -5px;
+}
+
+/* iCard from https://codepen.io/abhishek747/pen/BbWKVa */
+
+.icard {
+  margin: 30px auto;
+  /* width: 300px;
+  height: 300px; */
+  border-radius: var(--icard-corner);
+box-shadow: 5px 5px 30px 7px rgba(0,0,0,0.25), -5px -5px 30px 7px rgba(0,0,0,0.22);
+  cursor: pointer;
+  transition: 0.4s;
+}
+
+.icard .icard_image {
+  width: inherit;
+  height: inherit;
+  border-radius: 40px;
+}
+
+.icard .icard_image img {
+  width: inherit;
+  height: inherit;
+  border-radius: var(--icard-corner);
+  object-fit: cover;
+}
+
+.icard .icard_title {
+  text-align: center;
+  border-radius: 0px 0px var(--icard-corner) var(--icard-corner);
+  font-family: sans-serif;
+  font-weight: bold;
+  /* font-size: 30px; */
+  margin-top: -80px;
+  /* height: 40px; */
+}
+
+.icard:hover {
+  transform: scale(0.95, 0.95);
+  box-shadow: 5px 5px 20px 15px rgba(0,0,0,0.25), 
+    -5px -5px 20px 15px rgba(0,0,0,0.22);
 }

@@ -1,5 +1,6 @@
+const sequelize = require('../../config/connection');
 const router = require('express').Router();
-const { Locations, Placetypes } = require('../../models');
+const { Boards, Locations, Placetypes } = require('../../models');
 const withAuth = require('../../utils/auth');
 const withBoard = require('../../utils/withboard');
 
@@ -138,12 +139,10 @@ router.get('/search', withAuth, withBoard, async (req, res) => {
     //console.log(`Successfully added ${respobj.locations.length} locations`);
 
     //res.status(200).json({ msg: `Successfully found ${respobj.locations.length} locations` });
-    res
-      .status(200)
-      .json({
-        msg: `Successfully found ${respobj.locations.length} locations`,
-        ...respobj,
-      });
+    res.status(200).json({
+      msg: `Successfully found ${respobj.locations.length} locations`,
+      ...respobj,
+    });
   } catch (err) {
     res.status(400).json(err);
   }
@@ -176,7 +175,7 @@ router.post('/search', withAuth, withBoard, async (req, res) => {
     // Search from the default search term
     let searchterm = req.query.query.trim();
     if (searchterm.length === 0) {
-      searchterm = 'tourist attractions';
+      searchterm = 'tourist attractions'; // default search term. TBD: put it in a main config
     }
     console.log('SEARCH TERMS: ', searchterm);
 
@@ -269,16 +268,64 @@ router.post('/search', withAuth, withBoard, async (req, res) => {
     //   board_id: req.session.board_id,
     // });
 
+    // store current searched location in board database  =-=-=-=-=-=-
+    const updatedBoard = {
+      lat: parseFloat(req.query.lat),
+      lng: parseFloat(req.query.lng),
+      radius: parseInt(req.query.radius),
+      search: req.query.query,
+    };
+
+    console.log(
+      'updating board: ----------------',
+      updatedBoard,
+      ' - ',
+      req.session.board_id,
+      ' - ',
+      typeof updatedBoard
+    );
+
+    // const [rowsUpdated, [updatedBoardData]] = await Boards.update( ...updatedBoard, {
+    //   where: {
+    //     board_id: req.session.board_id,
+    //   },
+    //   returning: true,
+    // });
+
+    // console.log("update results rows: ", rowsUpdated, " - ", updatedBoardData);
+
+    // if (rowsUpdated === 0) {
+    //   res.status(404).json({ message: `Error updating board ${req.session.board_id}` });
+    // } else {
+    //   res.status(200).json(updatedBoardData);
+    // }
+
+    // If a board is selected, get all the selected locations for that board
+    locations = await sequelize.query(
+      'UPDATE boards SET lat = ?, lng = ?, radius = ?, search = ? WHERE board_id=?',
+      {
+        replacements: [
+          updatedBoard.lat,
+          updatedBoard.lng,
+          updatedBoard.radius,
+          updatedBoard.search,
+          req.session.board_id
+        ],
+        type: sequelize.QueryTypes.UPDATE,
+      }
+    );
+    console.log('\nLocations of selected board:', locations);
+
+    // finish updating board with search criteria
+
     console.log(
       'POST Success ========================================================================='
     );
 
-    res
-      .status(200)
-      .json({
-        msg: `Successfully added ${google_locations.results.length} locations`,
-        ...google_locations.results,
-      });
+    res.status(200).json({
+      msg: `Successfully added ${google_locations.results.length} locations`,
+      ...google_locations.results,
+    });
   } catch (err) {
     console.log(
       'POST Error =========================================================================',

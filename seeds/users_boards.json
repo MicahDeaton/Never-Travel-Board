@@ -18,5 +18,13 @@
     {
         "user_id": 2,
         "board_board_id": 5
+    },
+    {
+        "user_id": 4,
+        "board_board_id": 5
+    },
+    {
+        "user_id": 5,
+        "board_board_id": 5
     }
 ]

@@ -65,14 +65,14 @@ router.post('/', withAuth, async (req, res) => {
 router.post('/select/:boardId', withAuth, async (req, res) => {
   console.log('===== SELECT ONE BOARD =====');
   try {
-    const boardData = await Boards.findByPk(req.params.boardId);
+    const boardData = await Boards.findByPk(parseInt(req.params.boardId));
 
     // save selected board ID into our session
     req.session.board_id = parseInt(req.params.boardId);
     console.log('Saving session board_id', req.session.board_id);
-    req.session.save(() => {
-      res.status(200).json(boardData);
-    });
+    req.session.save();
+    
+    res.status(200).json(boardData);
   } catch (err) {
     res.status(500).json(err);
   }

@@ -42,15 +42,15 @@ const delButtonHandler = async (event) => {
       // select the board and redirect to the board-specific page
     } else if (event.target.classList.contains('selectboard')) {
       event.preventDefault();
-      response = await fetch(`/api/boards/select/${id}`, {
-        method: 'POST',
-      });
+      // response = await fetch(`/api/boards/select/${id}`, {
+      //   method: 'POST',
+      // });
 
-      if (response.ok) {
-        document.location.replace(`/boards/${id}`);
-      } else {
-        alert('Failed to select board');
-      }
+      // if (response.ok) {
+      document.location.replace(`/boards/${id}`);
+      // } else {
+      //   alert('Failed to select board');
+      // }
     }
   }
 };

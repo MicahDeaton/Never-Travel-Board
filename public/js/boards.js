@@ -69,7 +69,7 @@ document
   .addEventListener('click', selectBoardHandler);
 
 // Google map API
-var map;
+var map = null;
 
 function initMap() {
   var lat = 30.2850329; // UT Austin, TX
@@ -78,7 +78,11 @@ function initMap() {
     center: new google.maps.LatLng(lat, lng),
     zoom: 12,
   };
-  map = new google.maps.Map(document.getElementById('map'), mapobj);
+  if (document.getElementById('map')) {
+    map = new google.maps.Map(document.getElementById('map'), mapobj);
+  } else {
+    // console.log("This page has no map");
+  }
 }
 
 // Google autocomplete for search
@@ -109,8 +113,8 @@ function initializeautocomplete() {
       return;
     }
 
-    var html = '<div>Latitude: ' + place.geometry.location.lat() + '</div>';
-    html += '<div>Longitude: ' + place.geometry.location.lng() + '</div>';
+    var html = '<div id="boardlat" data-lat="'+ place.geometry.location.lat() + '">Latitude: ' + place.geometry.location.lat() + '</div>';
+    html += '<div id="boardlng" data-lng="'+ place.geometry.location.lng() + '">Longitude: ' + place.geometry.location.lng() + '</div>';
 
     let selectgeo = document.getElementById('geometry');
     selectgeo.innerHTML = html;
@@ -126,4 +130,7 @@ function initializeautocomplete() {
 window.onload = () => {
   initializeautocomplete();
   initMap();
+  let lat = document.getElementById('boardlat').dataset.lat;
+  let lng = document.getElementById('boardlng').dataset.lng;
+  map.setCenter(new google.maps.LatLng(lat, lng));
 };

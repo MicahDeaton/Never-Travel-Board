@@ -1,0 +1,38 @@
+{{!-- This renders board selection and management. Varies from whether:
+selectedboard: prompts user if they haven't selected a board+
+manageboard: if defined, board management (currently adds a delete button)
+--}}
+
+<div class='board-list gap-2'>
+    {{#if boards.length}}
+    <div class='bg-gray-200 rounded-box'>
+        <h3 class='text-4xl font-bold p-2'>{{#if hasdelete}}Manage boards{{else}}{{#if selectedboard}}Current Board:{{else}}Select a Board:{{/if}}{{/if}}
+            <span id="page_board_id" class='text-info'
+                data-board_id="{{selectedboard.board_id}}">{{selectedboard.board_name}}</span>
+        </h3>
+    </div>
+
+    <ul class='min-w-full bg-primary-content menu menu-vertical rounded-box p-2 text-primary'>
+        {{#if hasdelete}}
+        {{#each boards as |board|}}
+        <li class='w-full'>
+            <a class='selectboard justify-between' data-id='{{board.board_id}}'
+                href='/boards/select/{{board.board_id}}'>{{board.board_name}}
+                <button class='btn btn-sm warning deleteboard' data-id='{{board.board_id}}'>DELETE</button>
+            </a>
+        </li>
+        {{/each}}
+        {{else}}
+        {{#each boards as |board|}}
+        <li class='w-full'>
+            <a class='selectboard justify-between' data-id='{{board.board_id}}'
+                href='/boards/select/{{board.board_id}}'>{{board.board_name}}
+                <button class='btn btn-sm btn-primary exploreboard' data-id='{{board.board_id}}'>EXPLORE</button>
+            </a>
+        </li>
+        {{/each}}
+        {{/if}}
+    </ul>
+
+    {{/if}}
+</div>
