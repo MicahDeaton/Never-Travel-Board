@@ -3,7 +3,10 @@ const { User, Userstoboards } = require('../../models');
 const withAuth = require('../../utils/auth');
 
 router.post('/', async (req, res) => {
+  console.log("==================== Creating ", JSON.stringify(req.body));
   try {
+    let newUser = req.body;
+    newUser.isadmin = false;
     const userData = await User.create(req.body);
 
     req.session.save(() => {
@@ -13,6 +16,7 @@ router.post('/', async (req, res) => {
       res.status(200).json(userData);
     });
   } catch (err) {
+    console.log("error iun creating", err);
     res.status(400).json(err);
   }
 });
