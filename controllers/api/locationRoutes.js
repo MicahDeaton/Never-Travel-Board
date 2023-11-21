@@ -94,13 +94,18 @@ router.get('/search', withAuth, withBoard, async (req, res) => {
         if (!foundtypes.find((b) => b === a)) foundtypes.push(a);
       });
 
-      return {
-        location_name: i.name,
-        location_imageurl:
+      let imageurl = '/favicon.ico';
+      if (i.photos && i.photos[0].photo_reference) {
+        imageurl =
           'https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photo_reference=' +
           i.photos[0].photo_reference +
           '&key=' +
-          process.env.GOOGLE_API,
+          process.env.GOOGLE_API;
+      }
+
+      return {
+        location_name: i.name,
+        location_imageurl: imageurl,
         formatted_address: i.formatted_address,
         google_placeid: i.place_id,
         icon: i.icon,
@@ -124,9 +129,21 @@ router.get('/search', withAuth, withBoard, async (req, res) => {
     // });
 
     let respobj = { locations: createdLocations, foundtypes: foundtypes };
-    console.log('RESPONSE OBJ: ', respobj);
+    console.log(
+      'RESPONSE OBJ: ',
+      respobj,
+      ' length:',
+      respobj.locations.length
+    );
+    //console.log(`Successfully added ${respobj.locations.length} locations`);
 
-    res.status(200).json(respobj);
+    //res.status(200).json({ msg: `Successfully found ${respobj.locations.length} locations` });
+    res
+      .status(200)
+      .json({
+        msg: `Successfully found ${respobj.locations.length} locations`,
+        ...respobj,
+      });
   } catch (err) {
     res.status(400).json(err);
   }
@@ -134,6 +151,8 @@ router.get('/search', withAuth, withBoard, async (req, res) => {
 
 // populate location database with new locations from the API
 router.post('/search', withAuth, withBoard, async (req, res) => {
+  let google_locations;
+
   try {
     // req.params for POST to this route should include:
     //   lat: FLOAT
@@ -171,8 +190,6 @@ router.post('/search', withAuth, withBoard, async (req, res) => {
 
     console.log('will fetch ', apiUrl);
 
-    let google_locations;
-
     try {
       let google_fetch = await fetch(apiUrl, {
         method: 'GET',
@@ -196,13 +213,18 @@ router.post('/search', withAuth, withBoard, async (req, res) => {
     for (let i of google_locations.results) {
       console.log('post i: ', JSON.stringify(i));
 
-      let loc_element = {
-        location_name: i.name,
-        location_imageurl:
+      let imageurl = '/favicon.ico';
+      if (i.photos && i.photos[0].photo_reference) {
+        imageurl =
           'https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photo_reference=' +
           i.photos[0].photo_reference +
           '&key=' +
-          process.env.GOOGLE_API,
+          process.env.GOOGLE_API;
+      }
+
+      let loc_element = {
+        location_name: i.name,
+        location_imageurl: imageurl,
         formatted_address: i.formatted_address,
         google_placeid: i.place_id,
         icon: i.icon,
@@ -238,7 +260,7 @@ router.post('/search', withAuth, withBoard, async (req, res) => {
       }
     }
 
-    console.log('mapped result: ', createdLocations);
+    //console.log('mapped result: ', createdLocations);
 
     //const createdLocations = { your_request: JSON.stringify(req.query) };
     // const createdLocations = await Locations.create({
@@ -247,8 +269,21 @@ router.post('/search', withAuth, withBoard, async (req, res) => {
     //   board_id: req.session.board_id,
     // });
 
-    res.status(200).json({ msg: 'success' });
+    console.log(
+      'POST Success ========================================================================='
+    );
+
+    res
+      .status(200)
+      .json({
+        msg: `Successfully added ${google_locations.results.length} locations`,
+        ...google_locations.results,
+      });
   } catch (err) {
+    console.log(
+      'POST Error =========================================================================',
+      err
+    );
     res.status(400).json(err);
   }
 });
