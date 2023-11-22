@@ -4,6 +4,12 @@ const { Boards, Locations, Placetypes } = require('../../models');
 const withAuth = require('../../utils/auth');
 const withBoard = require('../../utils/withboard');
 
+var myconfig = {
+  UNSPLASH_API: 'hToCtEKI4Nj4xaC0jwg5Tva4DupP-vhbXhJ-mCiry5Y',
+  GOOGLE_API: 'AIzaSyDAKGh9hM6lkhtz5MNmuUehgwnvtLVjYr8',
+};
+
+
 // GET all locations
 router.get('/', withAuth, async (req, res) => {
   try {
@@ -59,7 +65,7 @@ router.get('/search', withAuth, withBoard, async (req, res) => {
       `query=${req.query.query}` +
       `&location=${req.query.lat}'%2C'${req.query.lng}` +
       `&radius=${req.query.radius}` +
-      `&key=${process.env.GOOGLE_API}`;
+      `&key=${myconfig.GOOGLE_API}`;
 
     console.log('will fetch ', apiUrl);
 
@@ -101,7 +107,7 @@ router.get('/search', withAuth, withBoard, async (req, res) => {
           'https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photo_reference=' +
           i.photos[0].photo_reference +
           '&key=' +
-          process.env.GOOGLE_API;
+          myconfig.GOOGLE_API;
       }
 
       return {
@@ -185,7 +191,7 @@ router.post('/search', withAuth, withBoard, async (req, res) => {
       `query=${req.query.query}` +
       `&location=${req.query.lat}'%2C'${req.query.lng}` +
       `&radius=${req.query.radius}` +
-      `&key=${process.env.GOOGLE_API}`;
+      `&key=${myconfig.GOOGLE_API}`;
 
     console.log('will fetch ', apiUrl);
 
@@ -218,8 +224,10 @@ router.post('/search', withAuth, withBoard, async (req, res) => {
           'https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photo_reference=' +
           i.photos[0].photo_reference +
           '&key=' +
-          process.env.GOOGLE_API;
+          myconfig.GOOGLE_API;
       }
+
+
 
       let loc_element = {
         location_name: i.name,

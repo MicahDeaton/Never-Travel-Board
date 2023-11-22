@@ -4,6 +4,12 @@ const { User, Boards, Userstoboards, Locations } = require('../models');
 const withAuth = require('../utils/auth');
 const withBoard = require('../utils/withboard');
 
+var myconfig = {
+  UNSPLASH_API: 'hToCtEKI4Nj4xaC0jwg5Tva4DupP-vhbXhJ-mCiry5Y',
+  GOOGLE_API: 'AIzaSyDAKGh9hM6lkhtz5MNmuUehgwnvtLVjYr8',
+};
+
+
 // Main page: all users, boards, and locations table
 // -------------------------------------------------
 router.get('/', withAuth, async (req, res) => {
@@ -104,7 +110,7 @@ router.get('/login', async (req, res) => {
 
   // get some random pictures from unsplash
   const term = 'travel';
-  let apiUrl = `https://api.unsplash.com/photos/random?query=${term}&orientation=portrait&count=8&per_page=1&client_id=${process.env.UNSPLASH_API}`;
+  let apiUrl = `https://api.unsplash.com/photos/random?query=${term}&orientation=portrait&count=8&per_page=1&client_id=${myconfig.UNSPLASH_API}`;
   console.log(apiUrl);
 
   let randompics;
