@@ -29,10 +29,16 @@ You are firstly prompted at the homescreen, this is going to show you your saved
 Once places have been chosen by the user, they will be tacked on the destination board, keeping it all in one seamless place!
 
 ### API Used
-Tripadvisor
+Google Places and Maps API
 
 #### Photo
+<img src="public/images/never-travel-board-app.png" alt="never-travel-board-application-homepage-screenshot"/>
 
 #### Final Product
+https://never--travel--board-e4faca7bab5b.herokuapp.com/login
 
 ##### Credits
+Special thanks to Andrea Presto, Mark Alfano, and Hubert Nguyen for assistance in the debugging process and for providing base code to model our project off of. Also made use of the Xpert Learning Assistant tool. 
+
+###### License
+This project is covered under the MIT license
