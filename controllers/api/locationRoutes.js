@@ -1,14 +1,9 @@
+const globconfig = require('../../config/config');
 const sequelize = require('../../config/connection');
 const router = require('express').Router();
 const { Boards, Locations, Placetypes } = require('../../models');
 const withAuth = require('../../utils/auth');
 const withBoard = require('../../utils/withboard');
-
-var myconfig = {
-  UNSPLASH_API: 'hToCtEKI4Nj4xaC0jwg5Tva4DupP-vhbXhJ-mCiry5Y',
-  GOOGLE_API: 'AIzaSyDAKGh9hM6lkhtz5MNmuUehgwnvtLVjYr8',
-};
-
 
 // GET all locations
 router.get('/', withAuth, async (req, res) => {
@@ -65,7 +60,7 @@ router.get('/search', withAuth, withBoard, async (req, res) => {
       `query=${req.query.query}` +
       `&location=${req.query.lat}'%2C'${req.query.lng}` +
       `&radius=${req.query.radius}` +
-      `&key=${myconfig.GOOGLE_API}`;
+      `&key=${globconfig.GOOGLE_API}`;
 
     console.log('will fetch ', apiUrl);
 
@@ -107,7 +102,7 @@ router.get('/search', withAuth, withBoard, async (req, res) => {
           'https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photo_reference=' +
           i.photos[0].photo_reference +
           '&key=' +
-          myconfig.GOOGLE_API;
+          globconfig.GOOGLE_API;
       }
 
       return {
@@ -191,7 +186,7 @@ router.post('/search', withAuth, withBoard, async (req, res) => {
       `query=${req.query.query}` +
       `&location=${req.query.lat}'%2C'${req.query.lng}` +
       `&radius=${req.query.radius}` +
-      `&key=${myconfig.GOOGLE_API}`;
+      `&key=${globconfig.GOOGLE_API}`;
 
     console.log('will fetch ', apiUrl);
 
@@ -224,7 +219,7 @@ router.post('/search', withAuth, withBoard, async (req, res) => {
           'https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photo_reference=' +
           i.photos[0].photo_reference +
           '&key=' +
-          myconfig.GOOGLE_API;
+          globconfig.GOOGLE_API;
       }
 
 
@@ -397,6 +392,7 @@ router.put('/:locationId', withAuth, withBoard, async (req, res) => {
 });
 
 router.delete('/:locationId', withAuth, withBoard, async (req, res) => {
+  console.log("===== DELETE LOCATION ", req.paramslocationId);
   try {
     const locationsData = await Locations.destroy({
       where: {

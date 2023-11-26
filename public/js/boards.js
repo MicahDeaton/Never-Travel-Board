@@ -61,12 +61,73 @@ const searchHandler = async (event) => {
   }
 };
 
-// call directly on the button
+// use onclick call directly on the button, so commented this out.
 // document.querySelector('#find-map').addEventListener('click', searchHandler);
 
-document
-  .querySelector('.board-list')
-  .addEventListener('click', selectBoardHandler);
+const addusertoboard = async (event) => {
+  event.preventDefault();
+
+  const user_name = document.querySelector('#sharetouser').value.trim();
+  const cur_board_id =
+    document.querySelector('#page_board_id').dataset.board_id; // need this to refresh page
+
+  try {
+    const response = await fetch('/api/boards/adduser', {
+      method: 'POST',
+      body: JSON.stringify({ user_name: user_name }),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+    console.log(response);
+    if (response.ok) {
+      document.location.replace(`/boards/${cur_board_id}`);
+    } else {
+      alert(`Failed to add user ${user_name} to board`);
+    }
+  } catch (err) {
+    alert('Error fetching /api/boards/adduser');
+  }
+};
+
+const deletelocationhandler = async (event) => {
+  event.preventDefault();
+
+  console.log(event.currentTarget);
+  let locationid = event.currentTarget.dataset.location_id;
+  console.log('location: ', locationid);
+  if (locationid) {
+    if (confirm(`About to delete ${locationid}`)) {
+      try {
+        const response = await fetch(`/api/locations/${locationid}`, {
+          method: 'DELETE',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
+        console.log(response);
+        if (response.ok) {
+          //  document.location.replace(`/boards/${cur_board_id}`);
+          document.location.reload();
+        } else {
+          alert(`Failed to add user ${user_name} to board`);
+        }
+      } catch (err) {
+        alert('Error fetching /api/boards/adduser');
+      }
+    }
+  } else {
+    alert('Error identifying location id from the page');
+  }
+};
+
+// document
+//   .querySelector('.board-list')
+//   .addEventListener('click', selectBoardHandler);
+
+// document
+//   .querySelector('.deletelocation')
+//   .addEventListener('click', deletelocationhandler);
 
 // Google map API
 var map = null;
@@ -113,8 +174,18 @@ function initializeautocomplete() {
       return;
     }
 
-    var html = '<div id="boardlat" data-lat="'+ place.geometry.location.lat() + '">Latitude: ' + place.geometry.location.lat() + '</div>';
-    html += '<div id="boardlng" data-lng="'+ place.geometry.location.lng() + '">Longitude: ' + place.geometry.location.lng() + '</div>';
+    var html =
+      '<div id="boardlat" data-lat="' +
+      place.geometry.location.lat() +
+      '">Latitude: ' +
+      place.geometry.location.lat() +
+      '</div>';
+    html +=
+      '<div id="boardlng" data-lng="' +
+      place.geometry.location.lng() +
+      '">Longitude: ' +
+      place.geometry.location.lng() +
+      '</div>';
 
     let selectgeo = document.getElementById('geometry');
     selectgeo.innerHTML = html;
