@@ -31,6 +31,85 @@ router.get('/users', withAuth, withBoard, async (req, res) => {
   }
 });
 
+router.post('/adduser', withAuth, withBoard, async (req, res) => {
+  console.log('===== ADD A USER TO A BOARD =====');
+
+  let selected_user_id;
+  let returneduser;
+
+  if (req.body.user_id) {
+    // use the supplied user ID first if provided
+    selected_user_id = req.body.user_id;
+  } else if (req.body.user_name) {
+    // no user id, but there is a user name, so try to look user id up by user name
+    try {
+      // Look up the user name
+      console.log('Looking up ', req.body.user_name.toLowerCase());
+      returneduser = await User.findOne({
+        where: { name: req.body.user_name.toLowerCase() },
+        attributes: ['id', 'name', 'email', 'isadmin'],
+      });
+      if (returneduser instanceof User) {
+        // found the user id
+        selected_user_id = returneduser.id;
+      } else {
+        // User not found
+        res
+          .status(404)
+          .json({ message: 'Error looking up user id or user name' });
+        return;
+      }
+    } catch (err) {
+      res.status(404).json({
+        message: `Error ${err} looking up user ${req.body.user_name}`,
+      });
+      return;
+    }
+  } else {
+    // API call did not provide user_name nor user_id
+    console.log(`No user info found in request`);
+    res.status(404).json({ message: 'Please provide a user id or user name' });
+    return;
+  }
+
+  // console.log(returneduser instanceof User); // true
+  // console.log(returneduser);
+
+  let userandboard;
+  try {
+    // Look up whether the user already owns the board
+    userandboard = await Userstoboards.findOne({
+      where: {
+        user_id: selected_user_id,
+        board_board_id: req.session.board_id,
+      },
+    });
+  } catch (err) {
+    res
+      .status(404)
+      .json({ message: 'Error while querying Userstoboards relationship' });
+  }
+
+  if (userandboard instanceof Userstoboards && userandboard.length() > 0) {
+    res.status(304).json({ message: 'User already attached to that board' });
+  } else {
+    try {
+      const newuseronboard = await Userstoboards.create({
+        board_board_id: req.session.board_id,
+        user_id: selected_user_id,
+      });
+      //res.status(200).json(newuseronboard);
+      res.status(200).json({
+        message: `User ${newuseronboard.user_id} added to board ${newuseronboard.board_board_id}`,
+      });
+    } catch (err) {
+      res
+        .status(500)
+        .json({ message: `Error updating usertoboards with ${err}` });
+    }
+  }
+});
+
 //   get specific board by id
 router.get('/:boardId', withAuth, async (req, res) => {
   console.log('===== LIST ONE BOARD =====');
@@ -71,7 +150,7 @@ router.post('/select/:boardId', withAuth, async (req, res) => {
     req.session.board_id = parseInt(req.params.boardId);
     console.log('Saving session board_id', req.session.board_id);
     req.session.save();
-    
+
     res.status(200).json(boardData);
   } catch (err) {
     res.status(500).json(err);

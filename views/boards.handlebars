@@ -28,15 +28,17 @@
 {{/if}}
 
 <div class='flex flex-wrap text-primary'>
-  <h3>Share this board</h3>
+  <h3>Add a user to this board</h3>
   <!-- if users want to share their board with others -->
   <section class="form-control w-1/2 lg:w-1/2">
     <label class="label">
-      <span class="label-text w-full max-w-xs text-2xl">with username:</span>
+      <span class="label-text w-full max-w-xs text-2xl">Enter a username:</span>
     </label>
 
-    <input id="sharetouser" type="text" placeholder="Share this board to" name="desttypes" list="desttypes"
+    <input id="sharetouser" type="text" placeholder="Enter the user name" name="desttypes" list="desttypes"
       class="input input-bordered w-full input-primary" />
+    <button id="addusertoboard" class="btn btn-primary" alt="Add a user to this board"
+      onclick="addusertoboard(event)">Add User</button>
   </section>
 </div>
 
