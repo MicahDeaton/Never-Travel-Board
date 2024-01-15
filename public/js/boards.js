@@ -206,9 +206,13 @@ window.onload = () => {
   map.setCenter(new google.maps.LatLng(lat, lng));
 
   // Get all placeIDs from rendered page
-  let locationPlaces = document.getElementById('travelcardcontainer').dataset.places.split(" ");
+
+  let locationPlaces;
+  if (document.getElementById('travelcardcontainer').hasAttribute('data-places')) {
+    locationPlaces = document.getElementById('travelcardcontainer').dataset.places.split(" ");
+  };
   for (let i = 0; i < (locationPlaces.length - 1); i = i + 3) {
-    console.log(`${decodeURI(locationPlaces[i])} ${locationPlaces[i + 1]} , ${locationPlaces[i + 2]}\n`);
+    // console.log(`${decodeURI(locationPlaces[i])} ${locationPlaces[i + 1]} , ${locationPlaces[i + 2]}\n`); // debug log
 
     let position = new google.maps.LatLng(locationPlaces[i + 1], locationPlaces[i + 2]);
     // Add a marker, positioned at the specified location
