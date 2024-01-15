@@ -11,7 +11,7 @@ selectedboard: SELECT * FROM locations WHERE board_id=?
                 {{selectedboard.board_name}}</h1>
         </div>
     </div>
-    <div id='travelcardcontainer'
+    <div id='travelcardcontainer' data-places='{{#each locations as |location|}}{{encodestr location.location_name}} {{location.latitude}} {{location.longitude}} {{/each}}' 
         class='w-full grid-cols-5 max-2xl:grid-cols-4 max-lg:grid-cols-3 max-md:grid-cols-2 grid gap-1'>
         {{#each locations as |location|}}
         <div class='card bg-gray-800 text-white shadow-xl hover:opacity-90'>

@@ -17,7 +17,7 @@ manageboard: if defined, board management (currently adds a delete button)
         {{#each boards as |board|}}
         <li class='w-full'>
             <a class='selectboard justify-between' data-id='{{board.board_id}}'
-                href='/boards/select/{{board.board_id}}'>{{board.board_name}}
+                href='/boards/{{board.board_id}}'>{{board.board_name}}
                 <button class='btn btn-sm warning deleteboard' data-id='{{board.board_id}}'>DELETE</button>
             </a>
         </li>
@@ -26,7 +26,7 @@ manageboard: if defined, board management (currently adds a delete button)
         {{#each boards as |board|}}
         <li class='w-full'>
             <a class='selectboard justify-between' data-id='{{board.board_id}}'
-                href='/boards/select/{{board.board_id}}'>{{board.board_name}}
+                href='/boards/{{board.board_id}}'>{{board.board_name}}
                 <button class='btn btn-sm btn-primary exploreboard' data-id='{{board.board_id}}'>EXPLORE</button>
             </a>
         </li>

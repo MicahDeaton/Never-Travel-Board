@@ -1,48 +1,46 @@
-<div class='row p-2'>
-  <div class='flex flex-row p-2'>
+<div class="grid grid-cols-2">
 
-    <div class='avatar online placeholder'>
-      <div class='bg-neutral text-neutral-content rounded-full w-12'>
-        <span class='text-3xl font-bold'>{{first_char currentuser.name}}</span>
-      </div>
-    </div>
+  {{> boardlistpartial}}
 
-    <h2 class='text-4xl font-bold mx-2 text-primary'>Welcome, {{currentuser.name}}!</h2>
+  {{!-- List of users who can manage this board --}}
+  <div class="bg-base-200 rounded-box gap-1 p-2">
+    <h3 class="text-primary font-bold">This board's users:</h3>
+    {{!-- List this user in first row --}}
+    <li class="flex flex-row mt-1">
+      <a class="btn btn-info">
+        <div class='avatar online placeholder mr-2'>
+          <div class='bg-neutral text-neutral-content rounded-full w-8'>
+            <span class='text-xl font-bold'>{{first_char currentuser.name}}</span>
+          </div>
+        </div>{{currentuser.name}}
+      </a>
+    </li>
+    {{!-- List all other users who can manage this board --}}
+    {{#if sharedusers.length}}
+    {{#each sharedusers as |shareduser|}}
+    <li class="flex flex-row mt-1">
+      <a class="btn">
+        <div class='avatar online placeholder mr-2'>
+          <div class='bg-neutral text-neutral-content rounded-full w-8'>
+            <span class='text-xl font-bold'>{{first_char shareduser.name}}</span>
+          </div>
+        </div>{{shareduser.name}}
+      </a>
+    </li>
+    {{/each}}
+    {{/if}}
+    {{!-- Form to add new user to the board --}}
+    <li class="flex flex-row mt-1 w-full">
+      <section class="form-control flex flex-row rounded-box">
+        <input id="sharetouser" class="w-fit" type="text" placeholder="Username" name="desttypes" list="desttypes"
+          class="input input-bordered w-full input-primary" />
+        <button id="addusertoboard" class="btn btn-primary w-fit m-1" alt="Add a user to this board"
+          onclick="addusertoboard(event)">Add</button>
+      </section>
+    </li>
   </div>
-</div>
-{{#if sharedusers.length}}
-<div class="bg-base-200 ml-[5%] rounded-box gap-1">
-  <h3 class="text-primary font-bold">Shared users:</h3>
-  {{#each sharedusers as |shareduser|}}
-  <li class="flex flex-row gap-1">
-    <a class="btn">
-      <div class='avatar online placeholder mr-2'>
-        <div class='bg-neutral text-neutral-content rounded-full w-8'>
-          <span class='text-xl font-bold'>{{first_char shareduser.name}}</span>
-        </div>
-      </div>{{shareduser.name}}
-    </a>
-  </li>
-  {{/each}}
-</div>
-{{/if}}
 
-<div class='flex flex-wrap text-primary'>
-  <h3>Add a user to this board</h3>
-  <!-- if users want to share their board with others -->
-  <section class="form-control w-1/2 lg:w-1/2">
-    <label class="label">
-      <span class="label-text w-full max-w-xs text-2xl">Enter a username:</span>
-    </label>
-
-    <input id="sharetouser" type="text" placeholder="Enter the user name" name="desttypes" list="desttypes"
-      class="input input-bordered w-full input-primary" />
-    <button id="addusertoboard" class="btn btn-primary" alt="Add a user to this board"
-      onclick="addusertoboard(event)">Add User</button>
-  </section>
 </div>
-
-{{> boardlistpartial}}
 
 {{> locationpartial}}
 

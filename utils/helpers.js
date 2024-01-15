@@ -22,4 +22,8 @@ module.exports = {
   first_char: (name) => {
     return name[0];
   },
+  encodestr: (mystring) => {
+    console.log(encodeURI(mystring));
+    return encodeURI(mystring);
+  },
 };
