@@ -86,7 +86,6 @@ router.get('/profile', withAuth, async (req, res) => {
       boards,
       hasdelete,
       selectedboard,
-      locations,
       logged_in: req.session.logged_in,
     });
   } catch (err) {

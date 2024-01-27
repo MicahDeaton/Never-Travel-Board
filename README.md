@@ -25,20 +25,54 @@ so that I can plan my itinerary effectively and maximize my travel experiences.
 -Stress-Free Planning Process: Minimize stress and uncertainty during travel planning by having a clear overview of your trip itinerary.
 
 ### Base Logic
-You are firstly prompted at the homescreen, this is going to show you your saved travel destination board. If the user would like to make a new travel board, there is a "New Trip" button that the user can press to do so. Once a New Destination place has been prompted in the search bar by the user, there will be filters that the user can make to narrow down the search for places in said destination.
+You are firstly prompted at the homescreen, this is going to show you your saved travel destination board. If the user would like to make a new travel board, there is a "Create a New Board" button that the user can press to do so. Once a new travel board has been created, the user can click on it and naviagte to that board's management page. The user can enter a Search Destination to select a general destination. There will also be a Filters search bar that the user can make to narrow down the search for places in said destination.\n
 Once places have been chosen by the user, they will be tacked on the destination board, keeping it all in one seamless place!
 
-### API Used
-Google Places and Maps API
+#### Managing boards
+- A user is prompted to log in or sign up.
+- A user that logged in or just signed up will be taken to the Profile page.
 
-#### Photo
+#### Profile Page
+- Boards can be created and deleted in the Profile page.
+- Creating a new board will add it to the "Manage boards" list.
+- Clicking on a board in the "Manage Boards" list will take the user to the boards page.
+
+#### Boards Page
+- The board page lists all the other users that can modify the board
+- Entering a new username and clicking "Add" will add that user to access the board
+- The board page lists all the chosen locations, its name, and its coordinates
+- Each location can be deleted by clicking on the trash can icon.
+
+- The board page contains a Google map centered around the Search Destination
+- The locations chosen will be rendered on blue map markers on the map
+
+- Entering a Search Destination, Search Filter, will search all the specified filters around the destination from Goolge Places.
+- All searched locations are added to the board by default. Users need to delete locations that they do not want
+
+#### Home Page
+- Clicking on the "Never Travel Board" heading will take the user to the homepage, which renders all locations.
+
+
+## API Used
+[Google Places and Maps API](RESOURCES.md#APIs)
+
+### Photo
 <img src="public/images/never-travel-board-app.png" alt="never-travel-board-application-homepage-screenshot"/>
 
-#### Final Product
+## Deployed Application
 https://never--travel--board-e4faca7bab5b.herokuapp.com/login
 
-##### Credits
+## Resources
+
+Click below for Database Diagrams and API information\
+[RESOURCES.md](RESOURCES.md)
+
+## Installation
+
+Click [here](INSTALL.md) for installation instructions.
+
+## Credits
 Special thanks to Andrea Presto, Mark Alfano, and Hubert Nguyen for assistance in the debugging process and for providing base code to model our project off of. Also made use of the Xpert Learning Assistant tool. 
 
-###### License
+## License
 This project is covered under the MIT license
